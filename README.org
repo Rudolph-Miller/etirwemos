@@ -2,10 +2,31 @@
 宇宙人とともに課題が発生したようです。
 
 ** Usage
+起動と開始はこれだけじゃけぇ。
+#+BEGIN_SRC lisp
+ETIRWEMOS> (in-package :etirwemos)
+#<PACKAGE "ETIRWEMOS">
+ETIRWEMOS> (start)
+#<SB-THREAD:THREAD "etirwemos" RUNNING {1004B78AD3}>
+ETIRWEMOS> (stop)
+NIL
+#+END_SRC
+
+clack が handler(?) を返してくれずループに入ってるぽいけぇ、とりあえずSBCLのスレッドにして動かしとるんよ。
+じゃけぇ、停止するときはそのスレッドを kill しとるけぇ。乱暴じろう。
+
+たぶん woo(cl-async) がループしとるんじゃろうかねぇ。(今度見るわ)
 
 ** Dependencies
+| lib   | description                                       |
+|-------+---------------------------------------------------|
+| [[https://github.com/fukamachi/woo][woo]]   | A non-blocking HTTP server written in Common Lisp |
+| [[https://github.com/fukamachi/clack][clack]] | Web application environment for Common Lisp       |
 
 ** Installation
+#+BEGIN_SRC lisp
+(asdf:load-system :etirwemos)
+#+END_SRC
 
 ** Author
 

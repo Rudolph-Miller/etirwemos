@@ -20,7 +20,9 @@
                :clack)
   :components ((:module "src"
                 :components
-                ((:file "etirwemos"))))
+                ((:file "package")
+		 (:file "etirwemos" :depends-on ("package"))
+		 (:file "handler"   :depends-on ("etirwemos")))))
   :description ""
   :long-description
   #.(with-open-file (stream (merge-pathnames
