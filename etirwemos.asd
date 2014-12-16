@@ -21,8 +21,9 @@
   :components ((:module "src"
                 :components
                 ((:file "package")
-		 (:file "etirwemos" :depends-on ("package"))
-		 (:file "handler"   :depends-on ("etirwemos")))))
+		 (:file "dispatcher" :depends-on ("package"))
+		 (:file "etirwemos"  :depends-on ("dispatcher"))
+		 (:file "handler"    :depends-on ("etirwemos")))))
   :description ""
   :long-description
   #.(with-open-file (stream (merge-pathnames
