@@ -1,10 +1,10 @@
 #|
-  This file is a part of etirwemos project.
-  Copyright (c) 2014 Satoshi Iwasaki (yanqirenshi@gmail.com)
+This file is a part of etirwemos project.
+Copyright (c) 2014 Satoshi Iwasaki (yanqirenshi@gmail.com)
 |#
 
 #|
-  Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
+Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
 |#
 
 (in-package :cl-user)
@@ -17,13 +17,16 @@
   :author "Satoshi Iwasaki"
   :license "LLGPL"
   :depends-on (:woo
-               :clack)
+               :clack
+               :cl-ppcre
+               :drakma
+               :cl-json)
   :components ((:module "src"
-                :components
-                ((:file "package")
-		 (:file "dispatcher" :depends-on ("package"))
-		 (:file "etirwemos"  :depends-on ("dispatcher"))
-		 (:file "handler"    :depends-on ("etirwemos")))))
+                        :components
+                        ((:file "package")
+                         (:file "dispatcher" :depends-on ("package"))
+                         (:file "etirwemos"  :depends-on ("dispatcher"))
+                         (:file "handler"    :depends-on ("etirwemos")))))
   :description ""
   :long-description
   #.(with-open-file (stream (merge-pathnames

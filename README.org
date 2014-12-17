@@ -18,10 +18,13 @@ clack が handler(?) を返してくれずループに入ってるぽいけぇ�
 たぶん woo(cl-async) がループしとるんじゃろうかねぇ。(今度見るわ)
 
 ** Dependencies
-| lib   | description                                       |
-|-------+---------------------------------------------------|
-| [[https://github.com/fukamachi/woo][woo]]   | A non-blocking HTTP server written in Common Lisp |
-| [[https://github.com/fukamachi/clack][clack]] | Web application environment for Common Lisp       |
+| lib      | description                                                        |
+|----------+--------------------------------------------------------------------|
+| [[https://github.com/fukamachi/woo][woo]]      | A non-blocking HTTP server written in Common Lisp                  |
+| [[https://github.com/fukamachi/clack][clack]]    | Web application environment for Common Lisp                        |
+| [[http://weitz.de/cl-ppcre/][cl-ppcre]] | CL-PPCRE is a portable regular expression library for Common Lisp. |
+| [[http://weitz.de/drakma/][drakma]]   | Drakma is a full-featured HTTP client implemented in Common Lisp.  |
+| [[http://common-lisp.net/project/cl-json/][cl-json]]  | A JSON parser and generator in Common-Lisp.                        |
 
 ** Installation
 #+BEGIN_SRC lisp
