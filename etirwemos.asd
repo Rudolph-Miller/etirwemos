@@ -20,10 +20,12 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
                :clack
                :cl-ppcre
                :drakma
-               :cl-json)
+               :cl-json
+	       :cl-who)
   :components ((:module "src"
                         :components
                         ((:file "package")
+                         (:file "bing"       :depends-on ("package"))
                          (:file "dispatcher" :depends-on ("package"))
                          (:file "etirwemos"  :depends-on ("dispatcher"))
                          (:file "handler"    :depends-on ("etirwemos")))))
