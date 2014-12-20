@@ -1,0 +1,137 @@
+Google カスタム検索エンジン
+
+* スタート・アップ
+** カスタム検索エンジンの作成
+
+https://www.google.co.jp/cse/
+
+画面右上の「カスタム検索エンジンの作成」ボタンをクリック。
+
+
+検索するサイト: www.google.com
+言語: 全ての言語
+検索エンジンの名前: Google
+検索オプション: 空白 ※schema.org タイプを使用しているページを制限する
+
+一番下の作成ボタンをクリック。
+
+
+完了ページに移動し、「カスタム検索エンジンの作成が完了しました。」が表示されている事を確認。
+
+作成されたようだ。
+
+左のサイドメニューから 検索エンジンの編集->設定 を選択。
+
+タブ：基本 の画面で、検索するサイトを「追加したサイトを重視して、ウェブ全体を検索する」を選択。
+最初に入力した検索するサイト "www.google.com" を削除する。
+一番下の「更新」ボタンをクリックして完了。
+
+<参考URL>
+https://support.google.com/customsearch/answer/2631040?hl=ja
+
+
+こちらで一覧表示できるみたい。
+https://www.google.co.jp/cse/all
+
+** API キーの取得
+Google Developers Console ってとこで取得するん。
+ここ
+https://console.developers.google.com/project
+
+
+ここで登録
+https://console.developers.google.com/flows/enableapi?apiid=customsearch
+
+アプリケーションを登録するプロジェクトの選択: 新しいプロジェクトを作成
+
+全部のチェックボックスにチェクして「同意して続行」をクリック。
+
+サイドメニューの「同意画面」を選択。
+具を盛って完了する。
+
+サイドメニューの「認証情報」を選択。
+「公開APIへのアクセス」で「新しいキーを作成」をクリック。
+「サーバーキー」を選択。
+具は盛らず「作成」ボタンをクリックで完了。
+左に「サーバー アプリケーションのキー」が表示されるのでその「API キー」が所要のもの。
+
+これにて完了。
+
+** Common Lisp からのコール
+下の場所を参照しながらったけぇ。
+
+'''参照元'''
+| 種類         | 場所                                                                   |
+|----------------+------------------------------------------------------------------------|
+| 本家           | https://developers.google.com/custom-search/json-api/v1/overview       |
+| ブログ(日本語) | http://c.cc-c.cc/2011/05/jsonatom-google-custom-search-api-using-rest/ |
+
+'''必要なもの'''
+| もの                     | クエリ・パラメータ | 備考               |
+|--------------------------+--------------------+--------------------|
+| カスタマサーチエンジンID | cs                 |                    |
+| 公開APIへのアクセスキー  | key                |                    |
+| 検索ワード               | q                  |                    |
+| 取得するフォーマット     | alt                | json(初期値), atom |
+
+'''URI'''
+#+BEGIN_SRC
+GET https://www.googleapis.com/customsearch/v1?key={公開APIへのアクセスキー}&cx={カスタマサーチエンジンID}&q={検索ワード&alt=json
+#+END_SRC
+
+* CSE:list @ Custom Search : Custom Search JSON/Atom API
+** Request
+*** HTTP request
+#+BEGIN_SRC 
+GET https://www.googleapis.com/customsearch/v1
+#+END_SRC
+
+*** Parameters
+
+**** 
+'''Required parameters'''
+
+
+
+
+** Response
+必要そうなのは item だけじゃね。
+
+'''トップレベルオブジェクト'''
+| proaerty          | type          | desctiption                                                                                                                                                                            |
+|-------------------+---------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| kind              | string        | Unique identifier for the type of current object. For this API, it is customsearch#search.                                                                                             |
+| url               | object        | The OpenSearch URL element that defines the template for this API.                                                                                                                     |
+| queries           | object        | Contains one or more sets of query metadata, keyed by role name. The possible role names are defined bythe  OpenSearch query roles and by two custom roles: nextPage and previousPage. |
+| promotions        | list          | The set of promotions. Present only if the custom search engine's configuration files define any promotions for the given query.                                                       |
+| context           | nested object | Metadata about the particular search engine that was used for performing the search query.                                                                                             |
+| searchInformation | object        | Encapsulates all information about the search.                                                                                                                                         |
+| spelling          | object        | Encapsulates a corrected query.                                                                                                                                                        |
+|-------------------+---------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| items             | list          | The current set of custom search results.                                                                                                                                              |
+
+*** items (list)
+| proaerty         | type   | desctiption                                                                                  |
+|------------------+--------+----------------------------------------------------------------------------------------------|
+| kind             | string | A unique identifier for the type of current object. For this API, it is customsearch#result. |
+| title            | string | The title of the search result, in plain text.                                               |
+| htmlTitle        | string | The title of the search result, in HTML.                                                     |
+| link             | string | The full URL to which the search result is pointing, e.g. http://www.example.com/foo/bar.    |
+| displayLink      | string | An abridged version of this search result’s URL, e.g. www.example.com.                       |
+| snippet          | string | The snippet of the search result, in plain text.                                             |
+| htmlSnippet      | string | The snippet of the search result, in HTML.                                                   |
+| cacheId          | string | Indicates the ID of Google's cached version of the search result.                            |
+| mime             | string | The MIME type of the search result.                                                          |
+| formattedUrl     | string | The URL displayed after the snippet for each search result.                                  |
+| htmlFormattedUrl | string | The HTML-formatted URL displayed after the snippet for each search result.                   |
+| pagemap          | object | Contains PageMap information for this search result.                                         |
+| labels           | list   | Encapsulates all information about refinement labels.                                        |
+| image            | object | Encapsulates all information about an image returned in search results.                      |
+
+*** kind (string)
+*** url (object)
+*** queries (object)
+*** promotions (list)
+*** context (nested object)
+*** searchInformation (object)
+*** spelling (object)
