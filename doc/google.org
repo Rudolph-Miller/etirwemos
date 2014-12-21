@@ -92,8 +92,6 @@ GET https://www.googleapis.com/customsearch/v1
 '''Required parameters'''
 
 
-
-
 ** Response
 必要そうなのは item だけじゃね。
 
@@ -135,3 +133,36 @@ GET https://www.googleapis.com/customsearch/v1
 *** context (nested object)
 *** searchInformation (object)
 *** spelling (object)
+* 検索結果のソート方法
+http://kagen88.blogspot.jp/2011/05/google-site-searchgoogle-google-account.html
+
+** param
+sort
+
+** date:metatags-creationdate
+date:metatags-creationdate、これはオブジェクトのある属性でソートするという書き方。
+
+PDFの結果だと、pageMapの中にmetatagsというオブジェクトがあります。
+
+その中のcreationdate日付型で降順（デフォルト）ソート。
+
+必ずpageMapの中のプロパティじゃないといけないみたい。
+
+しかも数字か日付じゃないと行けない。
+
+書き方は  sort=データ型:オブジェクト名-プロパティ名[:ソート順:強弱]
+
+* etc 
+Google Custom Search API
+<google>
+https://developers.google.com/custom-search/?hl=ja
+https://www.google.co.jp/cse/compare
+<セットアップの方法>
+http://ryutamaki.hatenablog.com/entry/2014/01/18/171640
+http://offsidenow.phpapps.jp/archives/415
+<ソートの方法>
+http://kagen88.blogspot.jp/2011/05/google-site-searchgoogle-google-account.html
+
+<etc>
+http://tech.kayac.com/archive/13_webapi_7_web.html
+
