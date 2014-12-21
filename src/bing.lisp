@@ -1,18 +1,8 @@
 (in-package :etirwemos)
 
 #|
-Bing Search API – Web Results Only を利用する。
-<uri>
-https://datamarket.azure.com/dataset/explore/bing/searchweb
 
-<参考URL>
-1. Schema Tabular Documentation for the Bing Search API
-https://onedrive.live.com/view.aspx?resid=9C9479871FBFA822!109&app=Word&authkey=!ACvyZ_MNtngQyCU
-
-2. bing search apiの使い方
-http://qiita.com/ysks3n/items/c418919ca436f3104dbe
 |#
-
 (defvar *bing-primary-account-key* nil "from https://datamarket.azure.com/dataset/explore/bing/searchweb")
 (defvar *bing-request-format* "json")
 (defvar *bing-base-uri* "https://api.datamarket.azure.com/Bing/SearchWeb/v1/Web")
