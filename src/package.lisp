@@ -4,7 +4,10 @@
   (:nicknames :eti)
   (:export #:*bing-primary-account-key*
            #:*bing-request-format*
-           #:*bing-base-uri*))
+           #:*bing-base-uri*
+	   #:*goole-public-api-key*
+	   #:*google-custom-search-engine-id*
+	   ))
 (in-package :etirwemos)
 
 ;; setting cl-who
