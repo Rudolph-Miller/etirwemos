@@ -26,6 +26,7 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
                         :components
                         ((:file "package")
                          (:file "bing"       :depends-on ("package"))
+                         (:file "google"     :depends-on ("package"))
                          (:file "dispatcher" :depends-on ("package"))
                          (:file "etirwemos"  :depends-on ("dispatcher"))
                          (:file "handler"    :depends-on ("etirwemos")))))

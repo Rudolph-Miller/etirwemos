@@ -61,31 +61,35 @@
 
 
 
-(defun test.html (env)
+(defun etirwemos.html (env)
   (declare (ignore env))
   `( 200
      (:content-type "text/html")
      ,(let ((out (make-string-output-stream)))
            (with-html-output (stream out :prologue t)
-             (:html (:head (:title "clr")
+             (:html (:head (:title "WCLR")
                            (:link :rel "stylesheet"
                                   :type "text/css"
                                   :href "/etirwemos.css"))
                     (:body
                      (:section :id "background" :style "z-index:-999;"
-                               (:p "World Common Lisp reports"))
-                     (:section :id "reports"    :style "z-index:999;"
-                               (dotimes (i 30)
-                                 (htm (:article :class "report" (:div (fmt "~a" i))))))))
+                               (:p "World Common Lisp Reports"))
+                     (:section :id "reports"    :style "z-index:999;")
+		     (:script :src "https://code.jquery.com/jquery-2.1.3.min.js")
+		     (:script :src "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js")
+		     (:script :src "/yzr.js")
+		     (:script :src "/yzrHtml.js")
+		     (:script :src "/etirwemos.js")))
              (list (get-output-stream-string out))))))
 
 
-(defun test.css (env)
+(defun etirwemos.css (env)
   (declare (ignore env))
   `(200
     (:content-type "text/css")
     (,(cl-css:css
-       `((* :margin 0px :padding 0px)
+       `((* :margin 0px :padding 0px
+	    :color ,(css.color :font))
          (html :background ,(css.color :base))
          ("html, body, body > section"
           :width 100% :height 100%)
@@ -94,15 +98,34 @@
          ("section#background" :padding 88px)
          ("section#background > p" :font-size 222px
                                    :color ,(css.color :font))
-         ("section#reports" :background ,(css.color :base 0.88)
-                            :overflow auto)
+         ("section#background.start > p" :color ,(css.color :active))
+         ("section#reports" :background ,(css.color :base 0.95)
+                            :overflow auto
+			    :padding 55px)
          ("article.report" :padding 11px
                            :float left)
          ("article.report > div" :background ,(css.color :contents 0.33)
-                                 :width 222px :height 222px
+                                 :width 466px ;;:width 222px 
+				 :height 222px
                                  :border-radius 3px
                                  :padding 22px)
          ("article.report > div:hover" :background ,(css.color :contents 1))
+         ("article.report > div p.title" :margin-bottom 22px)
+	 ;;
+         ("article.next-load" :padding 11px
+                           :float left)
+         ("article.next-load > div" :background ,(css.color :active 0.11)
+				    :width 222px 
+				    :height 222px
+				    :border-radius 3px
+				    :padding 22px
+				    :font-size 55px
+				    :text-align center
+				    :padding-top 33px
+				    )
+         ("article.next-load > div:hover" :background ,(css.color :active 0.22))
+         ("article.next-load > div:active" :background ,(css.color :active)
+					   :color "#fff")
          )))))
 
 
@@ -113,6 +136,24 @@
     (:content-type "text/html")
     ("<html><head></head><body>Hello hanage2</body></html>")))
 
+(defun etirwemos.js (env)
+  (declare (ignore env))
+  '(200
+    (:content-type "application/x-javascript")
+    #p"/home/yanqirenshi/prj/etirwemos/src/etirwemos.js"))
+
+(defun yzr.js (env)
+  (declare (ignore env))
+  '(200
+    (:content-type "application/x-javascript")
+    #p"/home/yanqirenshi/prj/etirwemos/src/yzr.js"))
+
+(defun yzrHtml.js (env)
+  (declare (ignore env))
+  '(200
+    (:content-type "application/x-javascript")
+    #p"/home/yanqirenshi/prj/etirwemos/src/yzrHtml.js"))
+
 
 (defun refresh-dispach-table ()
   "これ、まぁ仮設じゃけぇ。重複とかエエ感じにせにゃぁいけんね。"
@@ -122,10 +163,22 @@
            :function org-mode.css)
           (:regex    "/etirwemos.html"
            :fields   nil
-           :function test.html)
+           :function etirwemos.html)
           (:regex    "/etirwemos.css"
            :fields   nil
-           :function test.css)
-          (:regex    "/etirwemos/(\\d+).html"
+           :function etirwemos.css)
+          (:regex    "/etirwemos.js"
+           :fields   nil
+           :function etirwemos.js)
+          (:regex    "/yzr.js"
+           :fields   nil
+           :function yzr.js)
+          (:regex    "/yzrHtml.js"
+           :fields   nil
+           :function yzrHtml.js)
+          (:regex    "/etirwemos/(.+)\\.js"
            :fields   (:code)
-           :function test-path-param.html))))
+           :function test-path-param.html)
+          (:regex    "/etirwemos/search/www/google/start/(\\d+)"
+           :fields   (:start)
+           :function search-www-json))))

@@ -1,20 +1,20 @@
 (in-package :etirwemos)
 
 (defvar *dispach-table* nil)
-'((:regex    "/etirwemos.html"
-   :fields   nil
-   :function test.html)
-  (:regex    "/etirwemos.css"
-   :fields   nil
-   :function test.css)
-  (:regex    "/etirwemos/(\\d+).html"
-   :fields   (:code)
-   :function test-path-param.html)))
 
 
 (defun make-path-param (fields values)
-  "パスパラメータを作るんじゃけど、今すぐ必要じゃないけぇ後まわしにするわ。2014-12-16"
-  (list fields values))
+  ""
+  (print (and fields values))
+  (when (and (and fields values)
+	     (= (length fields) (length values)))
+    (let ((len (length fields))
+	  (out nil))
+      (dotimes (i len)
+	(setf out 
+	      (append out (list (nth i fields) (aref values i)))))
+      out)))
+
 
 (defun supplement-path-regex (reg)
   "あとで盛るかもしれんし。関数化しとくわ。"
