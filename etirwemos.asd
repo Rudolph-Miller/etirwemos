@@ -21,7 +21,9 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
                :cl-ppcre
                :drakma
                :cl-json
-	       :cl-who)
+	       :cl-who
+	       :cl-css
+	       :cl-oauth)
   :components ((:module "src"
                         :components
                         ((:file "package")
