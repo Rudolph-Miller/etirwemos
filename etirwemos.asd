@@ -16,14 +16,15 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
   :version "0.1"
   :author "Satoshi Iwasaki"
   :license "LLGPL"
-  :depends-on (:woo
+  :depends-on (:upanishad
+	       :woo
                :clack
                :cl-ppcre
                :drakma
                :cl-json
-	       :cl-who
-	       :cl-css
-	       :cl-oauth)
+               :cl-who
+               :cl-css
+               :cl-oauth)
   :components ((:module "src"
                         :components
                         ((:file "package")
@@ -31,7 +32,9 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
                          (:file "google"     :depends-on ("package"))
                          (:file "dispatcher" :depends-on ("package"))
                          (:file "etirwemos"  :depends-on ("dispatcher"))
-                         (:file "handler"    :depends-on ("etirwemos")))))
+                         (:file "clack"      :depends-on ("etirwemos"))
+                         (:file "upanishad"  :depends-on ("etirwemos"))
+                         (:file "main"       :depends-on ("clack" "upanishad")))))
   :description ""
   :long-description
   #.(with-open-file (stream (merge-pathnames

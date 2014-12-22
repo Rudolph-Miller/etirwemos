@@ -18,13 +18,17 @@ clack が handler(?) を返してくれずループに入ってるぽいけぇ�
 たぶん woo(cl-async) がループしとるんじゃろうかねぇ。(今度見るわ)
 
 ** Dependencies
-| lib      | description                                                        |
-|----------+--------------------------------------------------------------------|
-| [[https://github.com/fukamachi/woo][woo]]      | A non-blocking HTTP server written in Common Lisp                  |
-| [[https://github.com/fukamachi/clack][clack]]    | Web application environment for Common Lisp                        |
-| [[http://weitz.de/cl-ppcre/][cl-ppcre]] | CL-PPCRE is a portable regular expression library for Common Lisp. |
-| [[http://weitz.de/drakma/][drakma]]   | Drakma is a full-featured HTTP client implemented in Common Lisp.  |
-| [[http://common-lisp.net/project/cl-json/][cl-json]]  | A JSON parser and generator in Common-Lisp.                        |
+| lib       | description                                                              |
+|-----------+--------------------------------------------------------------------------|
+| [[https://github.com/fukamachi/woo][woo]]       | A non-blocking HTTP server written in Common Lisp                        |
+| [[https://github.com/fukamachi/clack][clack]]     | Web application environment for Common Lisp                              |
+| [[http://weitz.de/cl-ppcre/][cl-ppcre]]  | CL-PPCRE is a portable regular expression library for Common Lisp.       |
+| [[http://weitz.de/drakma/][drakma]]    | Drakma is a full-featured HTTP client implemented in Common Lisp.        |
+| [[http://common-lisp.net/project/cl-json/][cl-json]]   | A JSON parser and generator in Common-Lisp.                              |
+| [[http://weitz.de/cl-who/][cl-who]]    | Lisp Markup Languages.                                                   |
+| [[https://github.com/Inaimathi/cl-css][cl-css]]    | Non-validating, inline CSS generator for Common Lisp.                    |
+| [[https://github.com/skypher/cl-oauth][cl-oauth]]  | OAuth for Common Lisp.                                                   |
+| [[https://github.com/yanqirenshi/upanishad][upanishad]] | CL-PREVALENCE is an implementation of Object Prevalence for Common Lisp. |
 
 ** Installation
 #+BEGIN_SRC lisp

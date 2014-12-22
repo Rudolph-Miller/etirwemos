@@ -37,7 +37,7 @@ TODO:時間に余裕があったら盛ります。"
 
 
 
-(defun start ()
+(defun start-clack ()
   "Http-serverを起動するための関数なんよ。
 起動するときに dispatch-table はリフレッシュするようにしとるけぇ。"
   (when *handler* (error "前のんがまだ動いとるよ。"))
@@ -48,7 +48,7 @@ TODO:時間に余裕があったら盛ります。"
          :name "etirwemos")))
 
 
-(defun stop ()
+(defun stop-clack ()
   "Http-serverを停止する関数じゃけぇね。
 ちょっと乱暴なやりかたじゃけど、こんど綺麗にするけぇ。
 ゆるしてつかぁさい。"
