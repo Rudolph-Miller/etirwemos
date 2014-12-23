@@ -31,8 +31,19 @@ clack が handler(?) を返してくれずループに入ってるぽいけぇ�
 | [[https://github.com/yanqirenshi/upanishad][upanishad]] | CL-PREVALENCE is an implementation of Object Prevalence for Common Lisp. |
 
 ** Installation
+下の内容を .sbclrc に追加しんさい。
 #+BEGIN_SRC lisp
 (asdf:load-system :etirwemos)
+
+;; google costom search engin の設定
+(setf eti:*goole-public-api-key* "{@goole-public-api-key}")
+(setf eti:*google-custom-search-engine-id* "{@google-custom-search-engine-id}")
+;; github api v3 のための設定。(basic認証)
+(setf eti:*github-user* "{@github-user}")
+(setf eti:*github-password* "{@github-password}")
+;; upanishad のデータ保管場所を設定
+(setf eti:*data-stor* "{directory}")
+
 #+END_SRC
 
 ** Author
