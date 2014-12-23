@@ -224,4 +224,7 @@
            :function test-path-param.html)
           (:regex    "/etirwemos/search/www/google/start/(\\d+)"
            :fields   (:start)
-           :function search-www-json))))
+           :function search-www-json)
+          (:regex    "/etirwemos/github/repogitory/search/page/(\\d+)"
+           :fields   (:page)
+           :function search-github-rep))))

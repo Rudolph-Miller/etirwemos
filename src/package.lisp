@@ -13,6 +13,18 @@
 (in-package :etirwemos)
 
 ;;;
+;;; import...とりあえず仮設で.... defpackage に入れますんで。
+;;;
+(mapcar #'import
+        '('alexandria:alist-hash-table
+          'alexandria:plist-hash-table
+          'alexandria:hash-table-plist
+          'alexandria:hash-table-alist
+          'alexandria:hash-table-keys
+          'alexandria:hash-table-values))
+
+
+;;;
 ;;; setting cl-who
 ;;;
 (setf (html-mode) :html5)
