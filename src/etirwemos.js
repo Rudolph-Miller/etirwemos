@@ -26,7 +26,8 @@ function searchWWW(start){
 
     status('start');
     $.ajax({
-        url: "http://localhost:5000/etirwemos/search/www/google/start/"+start
+        // TODO: format4js
+        url: 'http://'+location.host+'/etirwemos/search/www/google/start/'+start
     }).done(function(data){
         if(data==null)
             data=[];
