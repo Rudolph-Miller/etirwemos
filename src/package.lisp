@@ -5,14 +5,25 @@
   (:export #:*bing-primary-account-key*
            #:*bing-request-format*
            #:*bing-base-uri*
-	   #:*goole-public-api-key*
-	   #:*google-custom-search-engine-id*
-	   ))
+           #:*goole-public-api-key*
+           #:*google-custom-search-engine-id*
+           #:*github-user*
+           #:*github-password*
+           #:*data-stor*))
 (in-package :etirwemos)
 
-;; setting cl-who
+;;;
+;;; setting cl-who
+;;;
 (setf (html-mode) :html5)
 
+
+;;;
+;;; Utility
+;;;
+(defun intern-keyword (name)
+  (when name
+    (intern (string-upcase name) (find-package "KEYWORD"))))
 
 
 

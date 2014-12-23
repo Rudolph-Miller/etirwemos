@@ -17,7 +17,7 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
   :author "Satoshi Iwasaki"
   :license "LLGPL"
   :depends-on (:upanishad
-	       :woo
+               :woo
                :clack
                :cl-ppcre
                :drakma
@@ -28,13 +28,15 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
   :components ((:module "src"
                         :components
                         ((:file "package")
-                         (:file "bing"       :depends-on ("package"))
-                         (:file "google"     :depends-on ("package"))
-                         (:file "dispatcher" :depends-on ("package"))
-                         (:file "etirwemos"  :depends-on ("dispatcher"))
-                         (:file "clack"      :depends-on ("etirwemos"))
-                         (:file "upanishad"  :depends-on ("etirwemos"))
-                         (:file "main"       :depends-on ("clack" "upanishad")))))
+                         (:file "webapi/bing"   :depends-on ("package"))
+                         (:file "webapi/google" :depends-on ("package"))
+                         (:file "webapi/github" :depends-on ("package"))
+                         (:file "restapi"       :depends-on ("webapi/bing" "webapi/google" "webapi/github"))
+                         (:file "dispatcher"    :depends-on ("package"))
+                         (:file "etirwemos"     :depends-on ("dispatcher"))
+                         (:file "clack"         :depends-on ("etirwemos"))
+                         (:file "upanishad"     :depends-on ("etirwemos"))
+                         (:file "main"          :depends-on ("clack" "upanishad")))))
   :description ""
   :long-description
   #.(with-open-file (stream (merge-pathnames
