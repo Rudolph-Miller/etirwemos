@@ -17,6 +17,7 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
   :author "Satoshi Iwasaki"
   :license "LLGPL"
   :depends-on (:upanishad
+               :shinrabanshou
                :woo
                :clack
                :cl-ppcre
@@ -35,7 +36,7 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
                          (:file "dispatcher"    :depends-on ("package"))
                          (:file "etirwemos"     :depends-on ("dispatcher"))
                          (:file "clack"         :depends-on ("etirwemos"))
-                         (:file "upanishad"     :depends-on ("etirwemos"))
+                         (:file "shinrabanshou" :depends-on ("etirwemos"))
                          (:file "main"          :depends-on ("clack" "upanishad")))))
   :description ""
   :long-description

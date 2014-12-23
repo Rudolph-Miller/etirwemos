@@ -7,12 +7,13 @@ upanishad を利用するためのコードじゃけぇ。
 |#
 
 
-(defvar *data-stor* nil 
+(defvar *data-stor* nil
   "upanishad がデータ(オブジェクト)をシリアライズしてファイルに保管するためのディレクトリ")
 
 
-(defvar *pool* nil 
-  "upanishad の pool クラスを保管する定数になるけぇ。")
+(defvar *pool* nil
+  "shinrabanshou の banshou クラスを保管する定数になるけぇ。
+banshou ってのは upanishad の poolクラスのサブクラスじゃけぇね。")
 
 
 (defun start-up ()
@@ -20,12 +21,15 @@ upanishad を利用するためのコードじゃけぇ。
 この表現でええかいね？"
   (when *pool*
     (error "すでに起動しとるけぇ。pool=~a" *pool*))
-  (setf *pool* (up:make-pool *data-stor*)))
+  (setf *pool* (shinra:make-banshou 'shinra:banshou *data-stor*)))
 
 
 (defun stop-up ()
-  "upanishad の pool を停止させるけぇ。"
+  "upanishad の pool を停止させるけぇ。
+*pool* はクローズ時に自動コミットするようにしとるけぇ。
+選べるようにした方がええんじゃろうか。"
   (when *pool*
+    (up:snapshot *pool*)
     (up:close-open-streams *pool*)
     (setf *pool* nil)))
 
