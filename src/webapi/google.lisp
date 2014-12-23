@@ -11,7 +11,7 @@
         (t (error "このフォーマットは対応しとらんよ。format=~a" format))))
 
 
-(defun search-www (keyword &key (start 1) (num 10) (format "json"))
+(defun search-google (keyword &key (start 1) (num 10) (format "json"))
   ""
   (multiple-value-bind (body-or-stream status-code headers uri stream must-close reason-phrase)
       (drakma:http-request "https://www.googleapis.com/customsearch/v1"
