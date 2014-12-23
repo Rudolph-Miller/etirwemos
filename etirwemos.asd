@@ -29,14 +29,16 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
   :components ((:module "src"
                         :components
                         ((:file "package")
+                         (:file "oauth"         :depends-on ("package"))
+                         (:file "shinrabanshou" :depends-on ("oauth"))
                          (:file "webapi/bing"   :depends-on ("package"))
                          (:file "webapi/google" :depends-on ("package"))
                          (:file "webapi/github" :depends-on ("package"))
                          (:file "restapi"       :depends-on ("webapi/bing" "webapi/google" "webapi/github"))
                          (:file "dispatcher"    :depends-on ("package"))
                          (:file "etirwemos"     :depends-on ("dispatcher"))
-                         (:file "clack"         :depends-on ("etirwemos"))
-                         (:file "shinrabanshou" :depends-on ("etirwemos"))
+                         (:file "me"            :depends-on ("dispatcher"))
+                         (:file "clack"         :depends-on ("etirwemos" "me"))
                          (:file "main"          :depends-on ("clack" "upanishad")))))
   :description ""
   :long-description

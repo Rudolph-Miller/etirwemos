@@ -217,20 +217,20 @@
 (defun refresh-dispach-table ()
   "これ、まぁ仮設じゃけぇ。重複とかエエ感じにせにゃぁいけんね。"
   (setf *dispach-table*
-        '((:regex    "/org-mode.css"
-           :fields   nil
-           :function org-mode.css)
+        '((:regex    "/org-mode.css"    :fields nil :function org-mode.css)
           (:regex    "/etirwemos.html"  :fields nil :function etirwemos.html)
           (:regex    "/etirwemos.css"   :fields nil :function etirwemos.css)
           (:regex    "/etirwemos.js"    :fields nil :function etirwemos.js)
+          (:regex    "/me.html"         :fields nil :function me.html)
+          (:regex    "/me.css"          :fields nil :function me.css)
+          (:regex    "/me.js"           :fields nil :function me.js)
           (:regex    "/lib/glide.js"    :fields nil :function glide.js)
           (:regex    "/lib/glide.css"   :fields nil :function glide.css)
-          (:regex    "/yzr.js"
-           :fields   nil
-           :function yzr.js)
-          (:regex    "/yzrHtml.js"
-           :fields   nil
-           :function yzrHtml.js)
+          (:regex    "/yzr.js"          :fields nil :function yzr.js)
+          (:regex    "/yzrHtml.js"      :fields nil :function yzrHtml.js)
+          ;;;
+          ;;; REST-API
+          ;;;
           (:regex    "/etirwemos/(.+)\\.js"
            :fields   (:code)
            :function test-path-param.html)
