@@ -135,9 +135,9 @@
                                            (:section :class "slider__item" :id "google"
                                                      (:section :class "pool"))
                                            (:section :class "slider__item" :id "twitter"
-                                                     (:h1 "twitter"))
+                                                     (:section :class "pool"))
                                            (:section :class "slider__item" :id "github"
-                                                     (:h1 "github"))))
+                                                     (:section :class "pool"))))
                        ;; js lib
                        (dolist (js js-list)
                          (htm (:script :src js)))))
@@ -161,8 +161,8 @@
                                    :color ,(css.color :font))
          ("section#background.start > p" :color ,(css.color :active))
          ("section#reports" :background ,(css.color :base 0.95))
-         ("section#google > .pool" :padding 55px :overflow auto
-                                   :height 100%)
+         ("section.slider__item > .pool" :padding 55px :overflow auto
+                                         :height 100%)
          ;;;
          ;;; card report
          ;;;
@@ -189,6 +189,18 @@
          ("article.next-load > div:hover" :background ,(css.color :active 0.22))
          ("article.next-load > div:active" :background ,(css.color :active)
                                            :color "#fff")
+         ;;;
+         ;;; card report github
+         ;;;
+         ("article.report.github table.timestamp" :margin "8px 0px 8px 0px")
+         ("article.report.github table.timestamp td" :font-size 80%)
+         ("article.report.github table.timestamp img.icon" :margin-right 11px)
+         ("article.report.github p.title" :font-weight bold
+                                          :text-overflow ellipsis
+                                          :white-space nowrap
+                                          :overflow hidden)
+         ("article.report.github p.description" :height 66px :overflow-y auto)
+
          )))))
 
 
