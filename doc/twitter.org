@@ -1,0 +1,39 @@
+* まず、画面から。
+/twitter/oauth/uri 
+query-param:{'callback-uri':callback,provider:'twitter'}
+から twitter のん認証画面の uri を取得してそこへリダイレクトする。
+callback は戻って来てほしい画面ね。
+
+* で、認証して戻ってきたら。
+
+#+BEGIN_SRC lisp
+(defun parson-html ()
+  ;; ここで OAuth からの Callback を捌きます。
+  (let ((parson            (session-user)) ;; これはユーザーね。
+        ;; Oauth からの戻りは query-param に oauth_searvice なるものがセットされる模様。
+        (service           (intern-keyword (hunchentoot:get-parameter "oauth_searvice")))
+	;; あと、request-tokey-key も query-param に入っとるみたいね。
+        (request-token-key (hunchentoot:get-parameter "oauth_token")))
+    ;; oauth からの callback の時の処理ね。
+    (when (oauth-callback-p service)
+      ;; redirect non param uri
+      ;;
+      ;; oauth.lisp で定義された関数。
+      ;; 単純に service が nil かどうかを返しとるだけじゃわ。
+      (unless (oauth-get service) (error "このサービスには対応していません。")) ;; 
+      ;; 
+      ;; リクエスト・トークンを取得しとるね。どっからじゃろうか？DBかいね？
+      (unless (get-request-token-at service request-token-key)
+        (error "対象のリクエストトークンが見付かりません。provider=~a, tokey-key=~a" service request-token-key))
+      ;;	
+      ;; こりゃぁ cl-oauth の処理じゃねぇ。
+      ;; authenticate-request-token
+      (handler-case
+          (cl-oauth:authorize-request-token-from-request (get-request-token-function service)))
+      ;; 
+      ;; で、最後にアクセストークンを保管する。と。
+      ;; Get and save Access-token
+      (let ((access-token (get-access-token service (get-request-token-at service request-token-key))))
+        (save-access-token access-token parson service)
+        (hunchentoot:redirect (puri:uri-path (puri:uri (hunchentoot:request-uri*)))))))
+#+END_SRC
