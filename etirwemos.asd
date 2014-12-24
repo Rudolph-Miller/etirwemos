@@ -29,8 +29,8 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
   :components ((:module "src"
                         :components
                         ((:file "package")
-                         (:file "oauth"         :depends-on ("package"))
-                         (:file "shinrabanshou" :depends-on ("oauth"))
+                         (:file "webapi/oauth"  :depends-on ("package"))
+                         (:file "shinrabanshou" :depends-on ("webapi/oauth"))
                          (:file "webapi/bing"   :depends-on ("package"))
                          (:file "webapi/google" :depends-on ("package"))
                          (:file "webapi/github" :depends-on ("package"))
@@ -39,7 +39,7 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
                          (:file "etirwemos"     :depends-on ("dispatcher"))
                          (:file "me"            :depends-on ("dispatcher"))
                          (:file "clack"         :depends-on ("etirwemos" "me"))
-                         (:file "main"          :depends-on ("clack" "upanishad")))))
+                         (:file "main"          :depends-on ("clack" "shinrabanshou")))))
   :description ""
   :long-description
   #.(with-open-file (stream (merge-pathnames

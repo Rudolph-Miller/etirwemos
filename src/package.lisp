@@ -2,6 +2,12 @@
 (defpackage etirwemos
   (:use :cl :cl-who :cl-css)
   (:nicknames :eti)
+  (:import-from "ALEXANDRIA" "ALIST-HASH-TABLE")
+  (:import-from "ALEXANDRIA" "PLIST-HASH-TABLE")
+  (:import-from "ALEXANDRIA" "HASH-TABLE-PLIST")
+  (:import-from "ALEXANDRIA" "HASH-TABLE-ALIST")
+  (:import-from "ALEXANDRIA" "HASH-TABLE-KEYS")
+  (:import-from "ALEXANDRIA" "HASH-TABLE-VALUES")
   (:export #:*bing-primary-account-key*
            #:*bing-request-format*
            #:*bing-base-uri*
@@ -11,17 +17,6 @@
            #:*github-password*
            #:*data-stor*))
 (in-package :etirwemos)
-
-;;;
-;;; import...とりあえず仮設で.... defpackage に入れますんで。
-;;;
-(mapcar #'import
-        '('alexandria:alist-hash-table
-          'alexandria:plist-hash-table
-          'alexandria:hash-table-plist
-          'alexandria:hash-table-alist
-          'alexandria:hash-table-keys
-          'alexandria:hash-table-values))
 
 
 ;;;
