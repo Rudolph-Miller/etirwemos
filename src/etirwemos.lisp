@@ -37,7 +37,11 @@
     (:content-type "application/x-javascript")
     #p"/home/yanqirenshi/prj/etirwemos/src/yzrHtml.js"))
 
-
+(defun format4js.js (env)
+  (declare (ignore env))
+  '(200
+    (:content-type "application/x-javascript")
+    #p"/home/yanqirenshi/prj/format4js/format4js.js"))
 
 ;;;
 ;;; Test Glide.js
@@ -117,6 +121,7 @@
                     "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
                     "/yzr.js"
                     "/yzrHtml.js"
+                    "/lib/format4js.js"
                     "/lib/glide.js"
                     "/etirwemos.js")))
     `( 200
@@ -217,17 +222,18 @@
 (defun refresh-dispach-table ()
   "これ、まぁ仮設じゃけぇ。重複とかエエ感じにせにゃぁいけんね。"
   (setf *dispach-table*
-        '((:regex    "/org-mode.css"    :fields nil :function org-mode.css)
-          (:regex    "/etirwemos.html"  :fields nil :function etirwemos.html)
-          (:regex    "/etirwemos.css"   :fields nil :function etirwemos.css)
-          (:regex    "/etirwemos.js"    :fields nil :function etirwemos.js)
-          (:regex    "/me.html"         :fields nil :function me.html)
-          (:regex    "/me.css"          :fields nil :function me.css)
-          (:regex    "/me.js"           :fields nil :function me.js)
-          (:regex    "/lib/glide.js"    :fields nil :function glide.js)
-          (:regex    "/lib/glide.css"   :fields nil :function glide.css)
-          (:regex    "/yzr.js"          :fields nil :function yzr.js)
-          (:regex    "/yzrHtml.js"      :fields nil :function yzrHtml.js)
+        '((:regex    "/org-mode.css"     :fields nil :function org-mode.css)
+          (:regex    "/etirwemos.html"   :fields nil :function etirwemos.html)
+          (:regex    "/etirwemos.css"    :fields nil :function etirwemos.css)
+          (:regex    "/etirwemos.js"     :fields nil :function etirwemos.js)
+          (:regex    "/me.html"          :fields nil :function me.html)
+          (:regex    "/me.css"           :fields nil :function me.css)
+          (:regex    "/me.js"            :fields nil :function me.js)
+          (:regex    "/lib/glide.js"     :fields nil :function glide.js)
+          (:regex    "/lib/glide.css"    :fields nil :function glide.css)
+          (:regex    "/lib/format4js.js" :fields nil :function format4js.js)
+          (:regex    "/yzr.js"           :fields nil :function yzr.js)
+          (:regex    "/yzrHtml.js"       :fields nil :function yzrHtml.js)
           ;;;
           ;;; REST-API
           ;;;

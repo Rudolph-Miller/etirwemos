@@ -27,8 +27,7 @@ function searchWWW(start){
 
     status('start');
     $.ajax({
-        // TODO: format4js
-        url: 'http://'+location.host+'/etirwemos/search/www/google/start/'+start
+        url: $.format('http://%s/etirwemos/search/www/google/start/%s',location.host,start)
     }).done(function(data){
         if(data==null)
             data=[];
@@ -89,8 +88,7 @@ function searchGithub(page){
 
     status('start');
     $.ajax({
-        // TODO: format4js
-        url: 'http://'+location.host+'/etirwemos/github/repogitory/search/page/'+page
+        url: $.format('http://%s/etirwemos/github/repogitory/search/page/%s',location.host,page)
     }).done(function(data){
         if(data==null)
             data=[];
@@ -131,8 +129,7 @@ function addGithubCards(data,page){
                    con:[{tag:'div',
                          con:[{tag:'a',attr:{href:this.html_url,target:'_blank'},
                                con:[{tag:'p',cls:['title'],
-                                     // TODO: format4js
-                                     con:this.name + ' @' + this.language}]},
+                                     con:$.format('%s @%s',this.name, this.language)}]},
                               {tag:'p',cls:['description'],
                                con:this.description},
                               {tag:'table',cls:['timestamp'],
