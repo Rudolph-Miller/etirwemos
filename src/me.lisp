@@ -65,10 +65,3 @@
                          :margin-right 11px
                          :margin-bottom 11px)
          )))))
-
-
-(defun me.js (env)
-  (declare (ignore env))
-  '(200
-    (:content-type "application/x-javascript")
-    #p"/home/yanqirenshi/prj/etirwemos/src/me.js"))
