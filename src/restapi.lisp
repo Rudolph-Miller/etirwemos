@@ -6,7 +6,9 @@ TODO:内容は不十分じゃねぇ。"
   (let ((val (getf (getf env :path-param) name)))
     (when val
       (cond ((eq type :string)
-             (write-to-string val))
+             (format nil "~a" val))
+            ((eq type :keyword)
+             (intern-keyword val))
             ((eq type :integer)
              (parse-integer val))
             (t (error "対応していないタイプです。type=~a,val=~a" type val))))))
@@ -24,11 +26,19 @@ TODO:内容は不十分じゃねぇ。"
 
 
 
-(defun search-github-rep (env)
-  "github のリポジトリの検索結果を返すけぇ"
-  (let ((page (get-path-param env :page :integer)))
+(defun get-oauth-provider-uri (env)
+  ""
+  (let ((provider (get-path-param env :provider :keyword))
+        ;; TODO: これは クエリパラムから取得しよう。
+        (callback-uri "http://localhost:5000/me.html"))
     `(200
-      (:content-type "application/json")
-      (,(cl-json:encode-json-to-string
-         (mapcar #'github-rep-item2map
-                 (cdr (assoc :items (search-github :page page)))))))))
+      (:content-type "text/plain")
+      (,(let ((request-token (obtain-request-token provider callback-uri)))
+             ;; リクエスト・トークンを一時的に保管します。
+             (save-request-token provider request-token)
+             ;; プロバイダの承認urlを取得します。
+             (make-authorization-uri (get-oauth-provider provider)
+                                     request-token
+                                     callback-uri))))))
+
+

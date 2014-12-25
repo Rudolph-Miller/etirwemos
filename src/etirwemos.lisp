@@ -186,8 +186,9 @@
           (:regex    "/etirwemos.css"    :fields nil :function etirwemos.css)
           (:regex    "/etirwemos.js"     :fields nil :function file-dispatcher)
           (:regex    "/me.html"          :fields nil :function me.html)
+          (:regex    "/me.html/"         :fields nil :function me.html)
           (:regex    "/me.css"           :fields nil :function me.css)
-          (:regex    "/me.js"            :fields nil :function me.js)
+          (:regex    "/me.js"            :fields nil :function file-dispatcher)
           (:regex    "/lib/glide.js"     :fields nil :function file-dispatcher)
           (:regex    "/lib/glide.css"    :fields nil :function file-dispatcher)
           (:regex    "/lib/format4js.js" :fields nil :function file-dispatcher)
@@ -204,4 +205,7 @@
            :function search-www-json)
           (:regex    "/etirwemos/github/repogitory/search/page/(\\d+)"
            :fields   (:page)
-           :function search-github-rep))))
+           :function search-github-rep)
+          (:regex    "/etirwemos/oauth/(.+)/uri"
+           :fields   (:provider)
+           :function get-oauth-provider-uri))))

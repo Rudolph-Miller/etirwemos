@@ -7,6 +7,16 @@ callback は戻って来てほしい画面ね。
 * で、認証して戻ってきたら。
 
 #+BEGIN_SRC lisp
+<認証して戻ったとき>
+http://localhost:5000/me.html/?
+oauth_searvice=TWITTER
+oauth_token=リクエストトークンのキー
+oauth_verifier=リクエストトークンの承認キー
+<認証をキャンセルした場合>
+http://localhost:5000/me.html/?
+oauth_searvice=TWITTER
+denied=リクエストトークンのキー
+
 (defun parson-html ()
   ;; ここで OAuth からの Callback を捌きます。
   (let ((parson            (session-user)) ;; これはユーザーね。
@@ -22,12 +32,13 @@ callback は戻って来てほしい画面ね。
       ;; 単純に service が nil かどうかを返しとるだけじゃわ。
       (unless (oauth-get service) (error "このサービスには対応していません。")) ;; 
       ;; 
-      ;; リクエスト・トークンを取得しとるね。どっからじゃろうか？DBかいね？
+      ;; リクエスト・トークンを取得しとるね。ローカルのどっかに保管しとるやつじゃろう。
       (unless (get-request-token-at service request-token-key)
         (error "対象のリクエストトークンが見付かりません。provider=~a, tokey-key=~a" service request-token-key))
       ;;	
       ;; こりゃぁ cl-oauth の処理じゃねぇ。
       ;; authenticate-request-token
+      ;; あぁ、これなぜか引数に request-token を取得する関数を渡すやつじゃったね。
       (handler-case
           (cl-oauth:authorize-request-token-from-request (get-request-token-function service)))
       ;; 

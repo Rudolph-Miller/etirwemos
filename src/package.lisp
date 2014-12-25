@@ -8,6 +8,8 @@
   (:import-from "ALEXANDRIA" "HASH-TABLE-ALIST")
   (:import-from "ALEXANDRIA" "HASH-TABLE-KEYS")
   (:import-from "ALEXANDRIA" "HASH-TABLE-VALUES")
+  (:import-from "clack.request" "query-parameter")
+  (:import-from "clack.request" "make-request")
   (:export #:*bing-primary-account-key*
            #:*bing-request-format*
            #:*bing-base-uri*
