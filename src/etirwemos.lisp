@@ -145,20 +145,23 @@
                                  :padding 22px)
          ("article.report > div:hover" :background ,(css.color :contents 1))
          ("article.report > div p.title" :margin-bottom 22px)
-         ("article.next-load" :padding 11px
-                              :float left)
-         ("article.next-load > div" :background ,(css.color :active 0.11)
-                                    :width 222px
-                                    :height 222px
-                                    :border-radius 3px
-                                    :padding 22px
-                                    :font-size 55px
-                                    :text-align center
-                                    :padding-top 33px
-                                    )
-         ("article.next-load > div:hover" :background ,(css.color :active 0.22))
+         ("article.operator" :padding 11px
+                             :float left)
+         ("article.operator > div" :width 222px
+                                   :height 222px
+                                   :border-radius 3px
+                                   :padding 22px
+                                   :font-size 55px
+                                   :text-align center
+                                   :padding-top 33px)
+         ("article.next-load > div"        :background ,(css.color :active 0.11))
+         ("article.next-load > div:hover"  :background ,(css.color :active 0.22))
          ("article.next-load > div:active" :background ,(css.color :active)
-                                           :color "#fff")
+                                           :color      ,(css.color :contents))
+         ("article.clear-load > div"        :background ,(css.color :hilight-blue 0.11))
+         ("article.clear-load > div:hover"  :background ,(css.color :hilight-blue 0.22))
+         ("article.clear-load > div:active" :background ,(css.color :hilight-blue)
+                                            :color      ,(css.color :contents))
          ;;;
          ;;; card report github
          ;;;

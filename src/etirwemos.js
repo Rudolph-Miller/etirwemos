@@ -1,14 +1,26 @@
 $(function () {
     $.html = new yzrHtml();
 
+    $('title').text('WCLR: Google');
+
     var glide = $('#reports').glide({
         autoplay: false,
         circular: false,
-        beforeTransition: function() {},
-        afterTransition: function() {}
+        beforeTransition: function() {
+        },
+        afterTransition: function() {
+            if(this.currentSlide==0)
+                $('title').text('WCLR: Google');
+
+            if(this.currentSlide==-1)
+                $('title').text('WCLR: Twitter');
+
+            if(this.currentSlide==-2)
+                $('title').text('WCLR: Github');
+        }
     });
 
-    searchWWW();
+    searchGoogle();
     searchGithub();
 });
 function status(action){
@@ -21,7 +33,60 @@ function status(action){
         background.removeClass('start');
 
 };
-function searchWWW(start){
+
+/**
+ * utility
+ */
+function getSearchFunc(type){
+    if(type=='google')
+        return searchGoogle;
+
+    if(type=='github')
+        return searchGithub;
+
+    throw new Error('対応しとらんよ。type='+type);
+};
+function addCards(type,pool,stmt,name,val){
+    pool.append($.html.gen(stmt));
+
+    pool.find('article.born').fadeIn("slow").removeClass('born');
+
+    var attr = {type:type};
+    attr[name]=val;
+    pool.append($.html.gen(
+        {tag:'article',
+         cls:['operator','next-load'],
+         attr:attr,
+         con:[{tag:'div',con:'Next More'}]}));
+
+
+    pool.append($.html.gen(
+        {tag:'article',
+         cls:['operator','clear-load'],
+         attr:attr,
+         con:[{tag:'div',con:'Clear Load'}]}));
+
+
+    pool.find('article.next-load').click(function(e){
+        var search = getSearchFunc($(this).attr('type'));
+        search($(this).attr('start')*1);
+        pool.find('article.operator').remove();
+    });
+
+
+    pool.find('article.clear-load').click(function(e){
+        pool.find('article.report').remove();
+        var search = getSearchFunc($(this).attr('type'));
+        search(1);
+        pool.find('article.operator').remove();
+    });
+};
+
+
+/**
+ * Google
+ */
+function searchGoogle(start){
     if(start==null)
         start = 1;
 
@@ -31,7 +96,7 @@ function searchWWW(start){
     }).done(function(data){
         if(data==null)
             data=[];
-        addCards(data,start+10);
+        addGoogleCards(data,start+10);
     }).fail(function(data){
         console.log('fail');
     }).always(function(data){
@@ -39,7 +104,8 @@ function searchWWW(start){
     });
 
 };
-function addCards(data,start){
+function addGoogleCards(data,nextStart){
+    var pool = $('section#google > .pool');
     var stmt = [];
     $.each(data,function(){
         stmt.push({tag:'article',
@@ -51,36 +117,24 @@ function addCards(data,start){
                               {tag:'p',cls:['snippet'],con:this.htmlSnippet}]}]});
     });
 
-    $('section#google > .pool').append($.html.gen(stmt));
-
-    $('section#google > .pool article.born').fadeIn("slow").removeClass('born');
-
-    $('section#google > .pool').append($.html.gen({tag:'article',
-                                                   cls:['next-load'],
-                                                   attr:{start:start},
-                                                   con:[{tag:'div',con:'Next More'}]}));
-
-    $('article.next-load').click(function(e){
-        searchWWW($(this).attr('start')*1);
-        $(this).remove();
-    });
+    addCards('google',pool,stmt,'start',nextStart);
 
 };
 
 /**
  * Github
  */
-function searchGithub(page){
-    if(page==null)
-        page = 1;
+function searchGithub(start){
+    if(start==null)
+        start = 1;
 
     status('start');
     $.ajax({
-        url: $.format('http://%s/etirwemos/github/repogitory/search/page/%s',location.host,page)
+        url: $.format('http://%s/etirwemos/github/repogitory/search/page/%s',location.host,start)
     }).done(function(data){
         if(data==null)
             data=[];
-        addGithubCards(data,page);
+        addGithubCards(data,start+1);
     }).fail(function(data){
         console.log('fail');
     }).always(function(data){
@@ -88,7 +142,7 @@ function searchGithub(page){
     });
 
 };
-function addGithubCards(data,page){
+function addGithubCards(data,nextStart){
     var pool = $('section#github > section.pool');
     var fmtDt = function(data,key,imagep){
         var val = data[key];
@@ -128,18 +182,5 @@ function addGithubCards(data,page){
                              ]}]});
     });
 
-    pool.append($.html.gen(stmt));
-
-    pool.find('article.born').fadeIn("slow").removeClass('born');
-
-    pool.append($.html.gen({tag:'article',
-                            cls:['next-load'],
-                            attr:{page:page+1},
-                            con:[{tag:'div',con:'Next More'}]}));
-
-    pool.find('article.next-load').click(function(e){
-        //TODO: これって重複する場合もあるんじゃろうな。。。
-        searchGithub($(this).attr('page')*1);
-        $(this).remove();
-    });
+    addCards('github',pool,stmt,'start',nextStart);
 };
