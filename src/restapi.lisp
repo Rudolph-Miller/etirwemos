@@ -26,6 +26,17 @@ TODO:内容は不十分じゃねぇ。"
 
 
 
+(defun search-github-rep (env)
+  ""
+  (let ((start (parse-integer (getf (getf env :path-param) :page))))
+    `(200
+      (:content-type "application/json")
+      (,(json:encode-json-to-string
+         (mapcar #'github-rep-item2map
+                 (cdr (assoc :items (search-github :page start)))))))))
+
+
+
 (defun get-oauth-provider-uri (env)
   ""
   (let ((provider (get-path-param env :provider :keyword))
@@ -40,5 +51,3 @@ TODO:内容は不十分じゃねぇ。"
              (make-authorization-uri (get-oauth-provider provider)
                                      request-token
                                      callback-uri))))))
-
-
