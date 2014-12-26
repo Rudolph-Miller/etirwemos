@@ -6,8 +6,7 @@ $(function () {
     var glide = $('#reports').glide({
         autoplay: false,
         circular: false,
-        beforeTransition: function() {
-        },
+        beforeTransition: function() {},
         afterTransition: function() {
             if(this.currentSlide==0)
                 $('title').text('WCLR: Google');
@@ -23,6 +22,7 @@ $(function () {
     searchGoogle();
     searchGithub();
 });
+
 function status(action){
     var background = $('section#background');
 
@@ -33,6 +33,7 @@ function status(action){
         background.removeClass('start');
 
 };
+
 
 /**
  * utility
