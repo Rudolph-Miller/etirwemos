@@ -25,6 +25,11 @@ TODO:時間に余裕があったら盛ります。"
   '(404 (:content-type "text/plain") ("Not found!!")))
 
 
+(define-condition etirwemos-error (error)
+  ((universal-time :initform (get-universal-time)
+                   :accessor universal-time)))
+
+
 (defun app (env)
   "clack に渡すアプリの関数じゃけぇ。"
   (multiple-value-bind (ret path-param func)
@@ -32,9 +37,13 @@ TODO:時間に余裕があったら盛ります。"
     (if ret
         (handler-case
             (funcall func (append env `(:path-param ,path-param)))
-          (error (e) (error-case-reply env e)))
+          (etirwemos-error (e) (error-case-reply env e)))
         (page-not-fund-reply env))))
 
+
+(defvar *etirwemos-log-dir* nil)
+(defun error-log-file ()
+  (pathname (concatenate 'string *etirwemos-log-dir* "error.log")))
 
 
 (defvar *twitter-consumer-key* nil)
@@ -56,6 +65,9 @@ TODO:時間に余裕があったら盛ります。"
          #'(lambda ()(clackup
                       (builder
                        <clack-middleware-accesslog>
+                       (<clack-middleware-backtrace>
+                        :output (error-log-file)
+                        :result-on-error '(500 () ("Internal Server Error")))
                        (<clack-middleware-oauth>
                         :consumer-key      *twitter-consumer-key*
                         :consumer-secret   *twitter-consumer-secret*

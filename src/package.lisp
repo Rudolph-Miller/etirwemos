@@ -17,7 +17,8 @@
   (:import-from "CLACK.MIDDLEWARE.ACCESSLOG" "<CLACK-MIDDLEWARE-ACCESSLOG>")
   (:import-from "CLACK.LOGGER.FILE" "<CLACK-LOGGER-FILE>")
   (:import-from "CLACK.MIDDLEWARE.OAUTH" "<CLACK-MIDDLEWARE-OAUTH>")
-  (:export #:*bing-primary-account-key*
+  (:import-from "CLACK.MIDDLEWARE.BACKTRACE" "<CLACK-MIDDLEWARE-BACKTRACE>")
+  (:EXPORT #:*bing-primary-account-key*
            #:*bing-request-format*
            #:*bing-base-uri*
            #:*goole-public-api-key*
@@ -28,6 +29,7 @@
            #:*twitter-consumer-secret*
            #:*etirwemos-src-dir*
            #:*etirwemos-js-lib-dir*
+           #:*etirwemos-log-dir*
            #:*data-stor*))
 (in-package :etirwemos)
 
