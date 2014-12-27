@@ -24,8 +24,10 @@
            #:*google-custom-search-engine-id*
            #:*github-user*
            #:*github-password*
-           #:*twitter-consumer-key* ni
+           #:*twitter-consumer-key*
            #:*twitter-consumer-secret*
+           #:*etirwemos-src-dir*
+           #:*etirwemos-js-lib-dir*
            #:*data-stor*))
 (in-package :etirwemos)
 

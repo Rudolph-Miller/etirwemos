@@ -3,6 +3,12 @@
 (defvar *dispach-table* nil)
 
 
+(defun get-mime-string (key)
+  (cond ((eq key :js)  "application/x-javascript")
+        ((eq key :css) "text/css")
+        (t (error "この key は対応していません。key=~a" key))))
+
+
 (defun make-path-param (fields values)
   ""
   (when (and (and fields values)
@@ -36,28 +42,32 @@
 
 
 
+(defvar *etirwemos-src-dir*    nil)
+(defvar *etirwemos-js-lib-dir* nil)
+
+(defun js-lib-pathname (path)
+  (pathname (concatenate 'string *etirwemos-js-lib-dir* path)))
+
+(defun src-pathname (path)
+  (pathname (concatenate 'string *etirwemos-src-dir* path)))
+
+
 ;;;
 ;;; ファイルディスパッチャ
 ;;;
 (defun file-data ()
   "ファイルのデータを返すんよ。"
-  '(("/etirwemos.js"     (:js  #p"/home/yanqirenshi/prj/etirwemos/src/etirwemos.js"))
-    ("/me.js"            (:js  #p"/home/yanqirenshi/prj/etirwemos/src/me.js"))
-    ("/lib/glide.js"     (:js  #p"/home/yanqirenshi/prj/Glide.js/dist/jquery.glide.min.js"))
-    ("/lib/glide.css"    (:css #p"/home/yanqirenshi/prj/Glide.js/dist/css/style.css"))
-    ("/lib/format4js.js" (:js  #p"/home/yanqirenshi/prj/format4js/format4js.js"))
-    ("/yzr.js"           (:js  #p"/home/yanqirenshi/prj/etirwemos/src/yzr.js"))
-    ("/yzrHtml.js"       (:js  #p"/home/yanqirenshi/prj/etirwemos/src/yzrHtml.js"))))
+  `(("/etirwemos.js"     (:js  ,(src-pathname    "etirwemos.js")))
+    ("/me.js"            (:js  ,(src-pathname    "me.js")))
+    ("/lib/glide.js"     (:js  ,(js-lib-pathname "Glide.js/dist/jquery.glide.min.js")))
+    ("/lib/glide.css"    (:css ,(js-lib-pathname "Glide.js/dist/css/style.css")))
+    ("/lib/format4js.js" (:js  ,(js-lib-pathname "format4js/format4js.js")))
+    ("/yzr.js"           (:js  ,(src-pathname    "yzr.js")))
+    ("/yzrHtml.js"       (:js  ,(src-pathname    "yzrHtml.js")))))
 
 
 (defun get-file-data (path)
   (second (assoc path (file-data) :test 'equalp)))
-
-
-(defun get-mime-string (key)
-  (cond ((eq key :js)  "application/x-javascript")
-        ((eq key :css) "text/css")
-        (t (error "この key は対応していません。key=~a" key))))
 
 
 (defun file-dispatcher (env)
