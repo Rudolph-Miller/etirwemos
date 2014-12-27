@@ -28,11 +28,7 @@ OAuth 用のライブラリなんよ。
    (user-data-id       :documentation ""
                        :accessor user-data-id       :initarg :user-data-id)
    (user-data-name     :documentation ""
-                       :accessor user-data-name     :initarg :user-data-name)
-   (access-token-table :documentation "これも何じゃったかいね？ アクセストークンはユーザー固有じゃけぇ不要じゃろうじゃ。"
-                       :accessor access-token-table :initarg :access-token-table)
-   (callback-url       :documentation "これはプロバイダ固有の情報じゃないけぇ不要じゃねぇ。いつか削除しよ。"
-                       :accessor callback-url       :initarg :callback-url)))
+                       :accessor user-data-name     :initarg :user-data-name)))
 
 (defgeneric get-oauth-provider (code &key pool object-class)
   (:documentation "oauth-provider を shinra から取得するよ。"))

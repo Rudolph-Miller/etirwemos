@@ -8,8 +8,14 @@
   (:import-from "ALEXANDRIA" "HASH-TABLE-ALIST")
   (:import-from "ALEXANDRIA" "HASH-TABLE-KEYS")
   (:import-from "ALEXANDRIA" "HASH-TABLE-VALUES")
-  (:import-from "clack.request" "query-parameter")
-  (:import-from "clack.request" "make-request")
+  (:import-from "CLACK.REQUEST" "QUERY-PARAMETER")
+  (:import-from "CLACK.REQUEST" "MAKE-REQUEST")
+  (:import-from "CLACK" "CLACKUP")
+  (:import-from "CLACK.BUILDER" "BUILDER")
+  (:import-from "CLACK.MIDDLEWARE.LOGGER" "<CLACK-MIDDLEWARE-LOGGER>")
+  (:import-from "CLACK.MIDDLEWARE.ACCESSLOG" "<CLACK-MIDDLEWARE-ACCESSLOG>")
+  (:import-from "CLACK.LOGGER.FILE" "<CLACK-LOGGER-FILE>")
+  (:import-from "CLACK.MIDDLEWARE.OAUTH" "<CLACK-MIDDLEWARE-OAUTH>")
   (:export #:*bing-primary-account-key*
            #:*bing-request-format*
            #:*bing-base-uri*
@@ -17,6 +23,8 @@
            #:*google-custom-search-engine-id*
            #:*github-user*
            #:*github-password*
+           #:*twitter-consumer-key* ni
+           #:*twitter-consumer-secret*
            #:*data-stor*))
 (in-package :etirwemos)
 

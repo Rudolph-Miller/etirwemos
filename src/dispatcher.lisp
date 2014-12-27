@@ -5,7 +5,6 @@
 
 (defun make-path-param (fields values)
   ""
-  (print (and fields values))
   (when (and (and fields values)
              (= (length fields) (length values)))
     (let ((len (length fields))

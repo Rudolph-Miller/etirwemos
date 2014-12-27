@@ -37,6 +37,15 @@ TODO:時間に余裕があったら盛ります。"
 
 
 
+(defvar *twitter-consumer-key* nil)
+(defvar *twitter-consumer-secret* nil)
+(defun twitter-oauth-authorized (req acc-token)
+  (declare (ignore req acc-token))
+  '(200
+    (:content-type "text/plain")
+    ("Authorized!")))
+
+
 (defun start-clack ()
   "Http-serverを起動するための関数なんよ。
 起動するときに dispatch-table はリフレッシュするようにしとるけぇ。"
@@ -44,8 +53,22 @@ TODO:時間に余裕があったら盛ります。"
   (refresh-dispach-table)
   (setf *handler*
         (sb-thread:make-thread
-         #'(lambda ()(clack:clackup #'app :server :woo :debug nil))
+         #'(lambda ()(clackup
+                      (builder
+                       <clack-middleware-accesslog>
+                       (<clack-middleware-oauth>
+                        :consumer-key      *twitter-consumer-key*
+                        :consumer-secret   *twitter-consumer-secret*
+                        :request-token-uri "https://api.twitter.com/oauth/request_token"
+                        :authorize-uri     "https://api.twitter.com/oauth/authorize"
+                        :access-token-uri  "https://api.twitter.com/oauth/access_token"
+                        :path              "/auth/twitter"
+                        :callback-base     "http://localhost:5000"
+                        :authorized #'twitter-oauth-authorized)
+                       #'app)
+                      :server :woo :debug nil))
          :name "etirwemos")))
+
 
 
 (defun stop-clack ()
