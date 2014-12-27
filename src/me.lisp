@@ -1,31 +1,14 @@
 (in-package :etirwemos)
 
 (defun me.html (env)
+  (declare (ignore env))
   (let* ((css-list '("/me.css"))
          (js-list  '("https://code.jquery.com/jquery-2.1.3.min.js"
                      "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
                      "/lib/format4js.js"
                      "/yzr.js"
                      "/yzrHtml.js"
-                     "/me.js"))
-         (req (make-request env))
-         (oauth_searvice (query-parameter req "oauth_searvice"))
-         (oauth_token    (query-parameter req "oauth_token"))
-         (oauth_verifier (query-parameter req "oauth_verifier"))
-         (denied         (query-parameter req "denied")))
-    (when oauth_searvice
-      (cond ((and oauth_token oauth_verifier) ;; 認証完了ケース
-             (let ((request-token (get-request-token oauth_searvice oauth_token))
-                   (provider (get-oauth-provider oauth_searvice)))
-               ;; TODO: request-token が取得できんかった時の考慮が必要よ。
-               ;; TODO: provider が取得できんかった時の考慮が必要よ。
-               (authorize-request-token request-token oauth_verifier) ;; リクエスト・トークンの承認
-               (obtain-access-token provider request-token) ;; アクセストークンの取得
-               ;; アクセストークンの保存
-               ;; TODO: ユーザーに紐付けたいねぇ。
-               ))
-            (denied nil) ;; 認証キャンセル(ユーザー選択)ケース
-            ))
+                     "/me.js")))
     `(200
       (:content-type "text/html")
       (,(let ((out (make-string-output-stream)))
