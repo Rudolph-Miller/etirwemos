@@ -26,15 +26,6 @@
         (t (error "なんじゃいこのtypeは!! type=~a" type))))
 
 
-;;;
-;;; test
-;;;
-(defun test-path-param.html (env)
-  (declare (ignore env))
-  '(200
-    (:content-type "text/html")
-    ("<html><head></head><body>Hello hanage2</body></html>")))
-
 
 ;;;
 ;;; org mode
@@ -200,9 +191,6 @@
           ;;;
           ;;; REST-API
           ;;;
-          (:regex    "/etirwemos/(.+)\\.js"
-           :fields   (:code)
-           :function test-path-param.html)
           (:regex    "/etirwemos/search/www/google/start/(\\d+)"
            :fields   (:start)
            :function search-www-json)
