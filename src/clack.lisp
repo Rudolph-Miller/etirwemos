@@ -9,6 +9,7 @@ clack を利用するためのコードじゃけぇ。
 
 (defvar *handler* nil "")
 
+
 (defgeneric error-case-reply (env error)
   (:documentation "HTTPリクエスト処理中にエラーが発生した場合の reply じゃけぇ。
 condition の種類でイロイロ盛れるようにしとるんじゃけど。
@@ -18,10 +19,10 @@ TODO:時間に余裕があったら凝ってみようかしら。"))
   '(500 (:content-type "text/plain") ("ごめんなさい Server Error です。")))
 
 
-(defun page-not-fund-reply (env)
+(defun page-not-found-reply (req)
   "ページが存在しない場合の reply じゃけぇ。
 TODO:時間に余裕があったら盛ります。"
-  (declare (ignore env))
+  (declare (ignore req))
   '(404 (:content-type "text/plain") ("Not found!!")))
 
 
@@ -34,11 +35,11 @@ TODO:時間に余裕があったら盛ります。"
   "clack に渡すアプリの関数じゃけぇ。"
   (multiple-value-bind (ret path-param func)
       (parse-path (getf env :path-info))
-    (if ret
-        (handler-case
-            (funcall func (append env `(:path-param ,path-param)))
-          (etirwemos-error (e) (error-case-reply env e)))
-        (page-not-fund-reply env))))
+    (let ((request (make-request env path-param)))
+      (if ret
+          (handler-case (funcall func request)
+            (etirwemos-error (e) (error-case-reply env e)))
+          (page-not-found-reply env)))))
 
 
 (defvar *etirwemos-log-dir* nil)

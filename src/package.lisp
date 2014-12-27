@@ -10,7 +10,6 @@
   (:import-from "ALEXANDRIA" "HASH-TABLE-VALUES")
   (:import-from "CL-JSON" "ENCODE-JSON-TO-STRING")
   (:import-from "CLACK.REQUEST" "QUERY-PARAMETER")
-  (:import-from "CLACK.REQUEST" "MAKE-REQUEST")
   (:import-from "CLACK" "CLACKUP")
   (:import-from "CLACK.BUILDER" "BUILDER")
   (:import-from "CLACK.MIDDLEWARE.LOGGER" "<CLACK-MIDDLEWARE-LOGGER>")
@@ -40,12 +39,39 @@
 (setf (html-mode) :html5)
 
 
+
+;;;
+;;; clack の拡張
+;;; clack.request:request に パス・パラメータを追加。
+;;;
+(in-package :clack.request)
+(defun make-request (env &key (request-class '<request>))
+  "上書きしてまおう。
+でも、ここまでしたパス・パラメータ使いたいんかいね。"
+  (apply #'make-instance request-class
+         :allow-other-keys t
+         :raw-body (shared-raw-body env)
+         env))
+
+
+(in-package :etirwemos)
+(defclass <eti-request> (clack.request:<request>)
+  ((path-param ;;:type string
+    :initarg :path-param
+    :reader path-param
+    :documentation "")))
+
+
+(defun make-request (env path-param)
+  (clack.request:make-request (append env `(:path-param ,path-param))
+                              :request-class '<eti-request>))
+
+
+
+
 ;;;
 ;;; Utility
 ;;;
 (defun intern-keyword (name)
   (when name
     (intern (string-upcase name) (find-package "KEYWORD"))))
-
-
-

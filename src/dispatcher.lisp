@@ -70,10 +70,10 @@
   (second (assoc path (file-data) :test 'equalp)))
 
 
-(defun file-dispatcher (env)
-  (let ((file-data (get-file-data (getf env :path-info))))
+(defun file-dispatcher (req)
+  (let ((file-data (get-file-data (clack.request:path-info req))))
     (if file-data
         `(200
           (:content-type ,(get-mime-string (first file-data)))
           ,(second file-data))
-        (page-not-fund-reply env))))
+        (page-not-found-reply req))))
