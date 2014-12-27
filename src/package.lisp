@@ -8,6 +8,7 @@
   (:import-from "ALEXANDRIA" "HASH-TABLE-ALIST")
   (:import-from "ALEXANDRIA" "HASH-TABLE-KEYS")
   (:import-from "ALEXANDRIA" "HASH-TABLE-VALUES")
+  (:import-from "CL-JSON" "ENCODE-JSON-TO-STRING")
   (:import-from "CLACK.REQUEST" "QUERY-PARAMETER")
   (:import-from "CLACK.REQUEST" "MAKE-REQUEST")
   (:import-from "CLACK" "CLACKUP")
