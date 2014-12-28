@@ -5,8 +5,6 @@
 clack を利用するためのコードじゃけぇ。
 
 |#
-
-
 (defvar *handler* nil "")
 
 
@@ -92,3 +90,26 @@ TODO:時間に余裕があったら盛ります。"
     (sb-thread:terminate-thread *handler*)
     (setf *handler* nil)))
 
+
+(defun start! ()
+  (refresh-dispach-table)
+  (setf *handler*
+        (clackup
+         (builder
+          <clack-middleware-accesslog>
+          (<clack-middleware-backtrace>
+           :output (error-log-file)
+           :result-on-error '(500 () ("Internal Server Error")))
+          (<clack-middleware-oauth>
+           :consumer-key      *twitter-consumer-key*
+           :consumer-secret   *twitter-consumer-secret*
+           :request-token-uri "https://api.twitter.com/oauth/request_token"
+           :authorize-uri     "https://api.twitter.com/oauth/authorize"
+           :access-token-uri  "https://api.twitter.com/oauth/access_token"
+           :path              "/auth/twitter"
+           :callback-base     "http://localhost:5000"
+           :authorized #'twitter-oauth-authorized)
+          #'app)
+         :server :woo :debug t)))
+
+(defun stop! () (clack.handler:stop *handler*))

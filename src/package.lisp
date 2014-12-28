@@ -54,6 +54,33 @@
          env))
 
 
+(defun split-cookie (cookie)
+  (let ((pos (search "=" cookie)))
+    `((,(subseq cookie 0 pos) . ,(subseq cookie (+ 1 pos))))))
+
+(defmethod initialize-instance :after ((this <request>) &rest env)
+  (remf env :allow-other-keys)
+  (setf (slot-value this 'env) env)
+
+  ;; cookies
+  (when-let (cookie (gethash "cookie" (headers this)))
+    (setf (slot-value this 'http-cookie)
+          (loop for kv in (ppcre:split "\\s*[,;]\\s*" cookie)
+             append (split-cookie kv))))
+
+  ;; GET parameters
+  (when (and (not (slot-boundp this 'query-parameters))
+             (query-string this))
+    (setf (slot-value this 'query-parameters)
+          (quri:url-decode-params (query-string this))))
+
+  ;; POST parameters
+  (when (and (not (slot-boundp this 'body-parameters))
+             (raw-body this))
+    (setf (slot-value this 'body-parameters)
+          (parse (content-type this) (raw-body this)))))
+
+
 (in-package :etirwemos)
 (defclass <eti-request> (clack.request:<request>)
   ((path-param ;;:type string

@@ -46,3 +46,14 @@ TODO:内容は不十分じゃねぇ。"
       (,(json:encode-json-to-string
          (mapcar #'github-rep-item2map
                  (cdr (assoc :items (search-github :page start)))))))))
+
+(defun search-github-rep (env)
+  ""
+  (let ((start (get-path-param env :page :integer)))
+    `(200
+      (:content-type "application/json")
+      (,(json:encode-json-to-string
+         (subseq (mapcar #'github-rep-item2map
+                         (cdr (assoc :items (search-github :page start))))
+                 ;; komatta
+                 0 29))))))
