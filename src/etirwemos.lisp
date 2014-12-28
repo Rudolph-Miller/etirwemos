@@ -67,42 +67,48 @@
 
 
 
+(defmacro gen-html (title css-list js-list &body body)
+  `(list 200
+         '(:content-type "text/html")
+         `(,(with-html-output-to-string
+             (s)
+             (:html (:head (:title ,title)
+                           ;; CSS
+                           (dolist (css ,css-list)
+                             (htm (:link :rel "stylesheet" :type "text/css" :href css))))
+                    (:body
+                     ,@body
+                     ;; js lib
+                     (dolist (js ,js-list)
+                       (htm (:script :src js)))))))))
+
+
+
 ;;;
 ;;; main page
 ;;;
 (defun etirwemos.html (env)
   (declare (ignore env))
-  (let ((css-list '("/lib/glide.css" "/etirwemos.css"))
-        (js-list  '("https://code.jquery.com/jquery-2.1.3.min.js"
-                    "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
-                    "/yzr.js"
-                    "/yzrHtml.js"
-                    "/lib/format4js.js"
-                    "/lib/glide.js"
-                    "/etirwemos.js")))
-    `( 200
-       (:content-type "text/html")
-       ,(let ((out (make-string-output-stream)))
-             (with-html-output (stream out :prologue t)
-               (:html (:head (:title "WCLR")
-                             ;; CSS
-                             (dolist (css css-list)
-                               (htm (:link :rel "stylesheet" :type "text/css" :href css))))
-                      (:body
-                       (:section :id "background" :style "z-index:-999;"
-                                 (:p "World Common Lisp Reports"))
-                       (:section :id "reports" :style "z-index:999;"
-                                 (:section :class "slider__wrapper"
-                                           (:section :class "slider__item" :id "google"
-                                                     (:section :class "pool"))
-                                           (:section :class "slider__item" :id "twitter"
-                                                     (:section :class "pool"))
-                                           (:section :class "slider__item" :id "github"
-                                                     (:section :class "pool"))))
-                       ;; js lib
-                       (dolist (js js-list)
-                         (htm (:script :src js)))))
-               (list (get-output-stream-string out)))))))
+  (gen-html "WCLR"
+      '("/lib/glide.css" "/etirwemos.css")
+      '("https://code.jquery.com/jquery-2.1.3.min.js"
+        "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
+        "/yzr.js"
+        "/yzrHtml.js"
+        "/lib/format4js.js"
+        "/lib/glide.js"
+        "/etirwemos.js")
+    (:section :id "background" :style "z-index:-999;"
+              (:p "World Common Lisp Reports"))
+    (:section :id "reports" :style "z-index:999;"
+              (:section :class "slider__wrapper"
+                        (:section :class "slider__item" :id "google"
+                                  (:section :class "pool"))
+                        (:section :class "slider__item" :id "twitter"
+                                  (:section :class "pool"))
+                        (:section :class "slider__item" :id "github"
+                                  (:section :class "pool"))))))
+
 
 
 (defun etirwemos.css (env)
