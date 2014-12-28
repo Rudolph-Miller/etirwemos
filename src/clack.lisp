@@ -8,6 +8,9 @@ clack を利用するためのコードじゃけぇ。
 (defvar *handler* nil "")
 
 
+;;;
+;;; アプリ部分
+;;;
 (defgeneric error-case-reply (env error)
   (:documentation "HTTPリクエスト処理中にエラーが発生した場合の reply じゃけぇ。
 condition の種類でイロイロ盛れるようにしとるんじゃけど。
@@ -30,7 +33,8 @@ TODO:時間に余裕があったら盛ります。"
 
 
 (defun app (env)
-  "clack に渡すアプリの関数じゃけぇ。"
+  "clack に渡すアプリの関数じゃけぇ。
+TODO: clack:component  を利用してみよう。"
   (multiple-value-bind (ret path-param func)
       (parse-path (getf env :path-info))
     (let ((request (make-request env path-param)))
@@ -40,13 +44,19 @@ TODO:時間に余裕があったら盛ります。"
           (page-not-found-reply env)))))
 
 
+;;;
+;;; ログ関連
+;;;
 (defvar *etirwemos-log-dir* nil)
 (defun error-log-file ()
   (pathname (concatenate 'string *etirwemos-log-dir* "error.log")))
 
 
-(defvar *twitter-consumer-key* nil)
-(defvar *twitter-consumer-secret* nil)
+
+;;;
+;;; OAuth (Twitter) 関連
+;;;
+(defvar *oauth-callback-base* nil)
 (defun twitter-oauth-authorized (req acc-token)
   (declare (ignore req acc-token))
   '(200
@@ -54,62 +64,38 @@ TODO:時間に余裕があったら盛ります。"
     ("Authorized!")))
 
 
+
+;;;
+;;; Clack の開始と終了
+;;;
 (defun start-clack ()
-  "Http-serverを起動するための関数なんよ。
-起動するときに dispatch-table はリフレッシュするようにしとるけぇ。"
   (when *handler* (error "前のんがまだ動いとるよ。"))
   (refresh-dispach-table)
-  (setf *handler*
-        (sb-thread:make-thread
-         #'(lambda ()(clackup
-                      (builder
-                       <clack-middleware-accesslog>
-                       (<clack-middleware-backtrace>
-                        :output (error-log-file)
-                        :result-on-error '(500 () ("Internal Server Error")))
-                       (<clack-middleware-oauth>
-                        :consumer-key      *twitter-consumer-key*
-                        :consumer-secret   *twitter-consumer-secret*
-                        :request-token-uri "https://api.twitter.com/oauth/request_token"
-                        :authorize-uri     "https://api.twitter.com/oauth/authorize"
-                        :access-token-uri  "https://api.twitter.com/oauth/access_token"
-                        :path              "/auth/twitter"
-                        :callback-base     "http://localhost:5000"
-                        :authorized #'twitter-oauth-authorized)
-                       #'app)
-                      :server :woo :debug nil))
-         :name "etirwemos")))
+  (let ((twitter-provider (get-oauth-provider :twitter)))
+    (unless twitter-provider (error "not exist oauth provider. name=~a":twitter))
+    (setf *handler*
+          (clackup
+           (builder
+            <clack-middleware-accesslog>
+            (<clack-middleware-backtrace>
+             :output (error-log-file)
+             :result-on-error '(500 () ("Internal Server Error")))
+            (<clack-middleware-oauth>
+             :consumer-key      (consumer-key      twitter-provider)
+             :consumer-secret   (consumer-secret   twitter-provider)
+             :request-token-uri (request-token-url twitter-provider)
+             :authorize-uri     (authorize-url     twitter-provider)
+             :access-token-uri  (access-token-url  twitter-provider)
+             :path              "/auth/twitter"
+             :callback-base     *oauth-callback-base*
+             :authorized #'twitter-oauth-authorized)
+            #'app)
+           ;; :server :woo
+           :debug t))))
 
 
 
 (defun stop-clack ()
-  "Http-serverを停止する関数じゃけぇね。
-ちょっと乱暴なやりかたじゃけど、こんど綺麗にするけぇ。
-ゆるしてつかぁさい。"
-  (when (and *handler* (eq 'SB-THREAD:THREAD (type-of *handler*)))
-    (sb-thread:terminate-thread *handler*)
+  (when *handler*
+    (clack.handler:stop *handler*)
     (setf *handler* nil)))
-
-
-(defun start! ()
-  (refresh-dispach-table)
-  (setf *handler*
-        (clackup
-         (builder
-          <clack-middleware-accesslog>
-          (<clack-middleware-backtrace>
-           :output (error-log-file)
-           :result-on-error '(500 () ("Internal Server Error")))
-          (<clack-middleware-oauth>
-           :consumer-key      *twitter-consumer-key*
-           :consumer-secret   *twitter-consumer-secret*
-           :request-token-uri "https://api.twitter.com/oauth/request_token"
-           :authorize-uri     "https://api.twitter.com/oauth/authorize"
-           :access-token-uri  "https://api.twitter.com/oauth/access_token"
-           :path              "/auth/twitter"
-           :callback-base     "http://localhost:5000"
-           :authorized #'twitter-oauth-authorized)
-          #'app)
-         :server :woo :debug t)))
-
-(defun stop! () (clack.handler:stop *handler*))

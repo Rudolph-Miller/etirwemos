@@ -10,6 +10,32 @@ OAuth 用のライブラリなんよ。
 
 
 ;;;;;
+;;;;;
+;;;;;
+(defclass people (shinra:node)
+  ((code :documentation ""
+         :accessor code
+         :initarg :code)
+   (name :documentation ""
+         :accessor name
+         :initarg :name)))
+
+
+(defgeneric get-people (code &key pool object-class)
+  (:method ((code string) &key (pool *pool*) (object-class 'people))
+    (first (up:find-object-with-slot pool object-class 'code code))))
+
+
+(defgeneric tx-make-people (pool code name)
+  (:method ((pool shinra:banshou) code name)
+    "森羅上に people を保管します。"
+    (shinra:tx-make-node pool 'people
+                         'code code
+                         'name name)))
+
+
+
+;;;;;
 ;;;;; OAuth プロバイダ クラス
 ;;;;;
 (defclass oauth-provider (shinra:node)
@@ -31,126 +57,116 @@ OAuth 用のライブラリなんよ。
                        :accessor user-data-name     :initarg :user-data-name)))
 
 (defgeneric get-oauth-provider (code &key pool object-class)
-  (:documentation "oauth-provider を shinra から取得するよ。"))
-
-(defmethod get-oauth-provider ((code symbol) &key (pool *pool*) (object-class 'oauth-provider))
-  (first (up:find-object-with-slot pool object-class 'code code)))
-
-(defmethod get-oauth-provider ((code string) &key (pool *pool*) (object-class 'oauth-provider))
-  (get-oauth-provider (intern-keyword code) :pool pool :object-class object-class))
+  (:documentation "oauth-provider を shinra から取得するよ。")
+  (:method ((code symbol) &key (pool *pool*) (object-class 'oauth-provider))
+    (first (up:find-object-with-slot pool object-class 'code code)))
+  (:method ((code string) &key (pool *pool*) (object-class 'oauth-provider))
+    (get-oauth-provider (intern-keyword code) :pool pool :object-class object-class)))
 
 
-
-(defmethod tx-make-oauth-provider ((pool shinra:banshou)
-                                   code consumer-key consumer-secret
-                                   request-token-url authorize-url access-token-url
-                                   user-data-id user-data-name
-                                   &key (object-class 'oauth-provider))
-  "森羅上に oauth-provider を保管します。"
-  (shinra:tx-make-node pool object-class
-                       'code               code
-                       'consumer-key       consumer-key
-                       'consumer-secret    consumer-secret
-                       'request-token-url  request-token-url
-                       'authorize-url      authorize-url
-                       'access-token-url   access-token-url
-                       'user-data-id       user-data-id
-                       'user-data-name     user-data-name))
-
-
-
-;;;;;
-;;;;; OAuth リクエスト・トークン
-;;;;;
-(defvar *request-token-pool* nil
-  "リクエストトークンを一時的に保管するためのリストです。
-データ構造は '(:provider nil :token nil) です。")
-
-
-(defgeneric save-request-token (provider request-token)
-  (:documentation "リクエスト・トークンを一時的に保管するけぇ。"))
-
-(defmethod save-request-token ((provider oauth-provider) (request-token cl-oauth:request-token))
-  "重複防止のコードは今は先送り。"
-  (push (list :provider provider :token request-token)
-        *request-token-pool*)
-  *request-token-pool*)
-
-(defmethod save-request-token ((provider symbol) (request-token cl-oauth:request-token))
-  (let ((prov (get-oauth-provider provider)))
-    (when prov
-      (save-request-token prov request-token))))
-
-
-
-(defmethod get-request-token ((provider-code symbol) request-token-key)
-  "保管したリクエスト・トークンを取得するんよ。"
-  (getf
-   (find-if #'(lambda (data)
-                (let ((save-provider (getf data :provider))
-                      (save-token    (getf data :token)))
-                  (and (eq (code save-provider) provider-code)
-                       (string= (cl-oauth:token-key save-token) request-token-key))))
-            *request-token-pool*)
-   :token))
-
-
-(defmethod get-request-token ((provider-code string) request-token-key)
-  "provider-code が文字の場合は キーワードに変換して get-request-token を呼ぶ。"
-  (get-request-token (intern-keyword provider-code) request-token-key))
-
-
-
-
-(defmethod obtain-request-token ((provider oauth-provider) callback-uri)
-  "OAuthリクエストトークンを生成するけぇ。
-リクエストトークンは cl-oauth:request-token クラスなんよ。"
-  (cl-oauth:obtain-request-token (request-token-url provider)
-                                 (cl-oauth:make-consumer-token :key    (consumer-key    provider)
-                                                               :secret (consumer-secret provider))
-                                 :callback-uri (format nil "~a/?oauth_searvice=~a" callback-uri (code provider))))
-
-(defmethod obtain-request-token ((provider symbol) callback-uri)
-  (let ((oauth-provider (get-oauth-provider provider)))
-    (when oauth-provider
-      (obtain-request-token oauth-provider callback-uri))))
-
-(defmethod obtain-request-token ((provider string) callback-uri)
-  (obtain-request-token (intern-keyword provider) callback-uri))
-
-
-(defun authorize-request-token (request-token verification-code)
-  "リクエスト・トークンを承認済の状態にします。
-cl-oauth:authorize-request-token-from-request を利用するんじゃけど、この関数は hunchentoot を利用することが前提となっとるようじゃけぇ。
-その具をとってきたいね。
-"
-  (cl-oauth:authorize-request-token request-token)
-  (setf (cl-oauth:request-token-verification-code request-token) verification-code)
-  ;; TODO:
-  ;; これねぇ。。。クエリパラメータから OAuthのパラメータをカットしたやつをセットしとるみたいなんじゃけど。
-  ;; 時間がないしスルーするわ。とりあえず問題ないはず。
-  ;; (setf (token-user-data token) user-parameters)
-  request-token)
-
-
-
-;;;;;
-;;;;; OAuth 承認画面のURI
-;;;;;
-(defmethod make-authorization-uri ((provider oauth-provider)
-                                   (request-token cl-oauth:request-token)
-                                   callback-uri)
-  "OAuthプロバイダの認証画面のURIを生成するけぇ。"
-  (format nil "~a" (puri:uri (cl-oauth:make-authorization-uri
-                              (authorize-url provider)
-                              request-token))))
-
+(defgeneric tx-make-oauth-provider (pool code consumer-key consumer-secret
+                                         request-token-url authorize-url access-token-url
+                                         user-data-id user-data-name
+                                         &key object-class)
+  (:documentation "")
+  (:method ((pool shinra:banshou)
+            code consumer-key consumer-secret
+            request-token-url authorize-url access-token-url
+            user-data-id user-data-name
+            &key (object-class 'oauth-provider))
+    "森羅上に oauth-provider を保管します。"
+    (shinra:tx-make-node pool object-class
+                         'code               code
+                         'consumer-key       consumer-key
+                         'consumer-secret    consumer-secret
+                         'request-token-url  request-token-url
+                         'authorize-url      authorize-url
+                         'access-token-url   access-token-url
+                         'user-data-id       user-data-id
+                         'user-data-name     user-data-name)))
 
 
 ;;;;;
 ;;;;; OAuth アスセストークン
 ;;;;;
-;; これは どこで 使う？
-(defmethod obtain-access-token ((provider oauth-provider) (request-token cl-oauth:request-token))
-  "承認されたリクエストトークンを エンドポイント に遅り、アクセストークンを取得する。"
-  (cl-oauth:obtain-access-token (access-token-url provider) request-token))
+(defclass oauth-access-token (shinra:node)
+  ((key    :documentation ""
+           :accessor key    :initarg :key)
+   (secret :documentation ""
+           :accessor secret :initarg :secret)))
+
+
+(defgeneric get-oauth-access-token (pool people provider)
+  (:documentation "")
+  (:method (pool people provider)
+    (list pool people provider)))
+
+
+(defgeneric tx-make-oauth-access-token (pool people provider key secret)
+  (:documentation "")
+  (:method ((pool shinra:banshou)
+            (people people)
+            (provider oauth-provider)
+            key secret)
+    (let ((token (shinra:tx-make-node pool 'oauth-access-token
+                                      'key key
+                                      'secret secret)))
+      (shinra:tx-make-edge *pool* 'shinra:edge provider token :issue)
+      (shinra:tx-make-edge *pool* 'shinra:edge people token :have)
+      token)))
+
+
+
+;;;;;
+;;;;;
+;;;;;
+(defgeneric find-next-node (pool start node r-type next-node)
+  (:documentation "")
+  (:method  ((pool shinra:banshou)
+             (start symbol)
+             (node shinra:node)
+             (r-type symbol)
+             (next-node-class symbol))
+    (labels ((_get-node (a) (getf a :node))
+             (_eq-node (b)
+               (and (eq r-type
+                        (shinra:get-edge-type (getf b :edge)))
+                    (eq next-node-class
+                        (class-name (class-of (getf b :node)))))))
+      (apply 'append
+             (list
+              (mapcar #'_get-node
+                      (remove-if-not #'_eq-node
+                                     (shinra:find-r pool 'shinra:edge start node)))))))
+  (:method ((pool shinra:banshou)
+            (start symbol)
+            (node shinra:node)
+            (r-type symbol)
+            (next-node shinra:node))
+    (labels ((_get-node (a) (getf a :node))
+             (_eq-node (b)
+               (and (eq r-type
+                        (shinra:get-edge-type (getf b :edge)))
+                    (eq next-node (getf b :node)))))
+      (apply 'append
+             (list
+              (mapcar #'_get-node
+                      (remove-if-not #'_eq-node
+                                     (shinra:find-r pool 'shinra:edge start node))))))))
+
+
+
+;; (get-access-token-at *pool* :twitter "114195568")
+(defgeneric get-access-token-at (pool provider people)
+  (:documentation "")
+  (:method ((pool shinra:banshou) (provider oauth-provider) (people people))
+    (apply 'append
+           (mapcar #'(lambda (token)
+                       (if (find-next-node pool :to token :issue provider)
+                           token
+                           nil))
+                   (find-next-node pool
+                                   :from people
+                                   :have 'oauth-access-token))))
+  (:method ((pool shinra:banshou) (provider symbol) (people string))
+    (get-access-token-at pool (get-oauth-provider provider) (get-people people))))

@@ -24,13 +24,13 @@
            #:*google-custom-search-engine-id*
            #:*github-user*
            #:*github-password*
-           #:*twitter-consumer-key*
-           #:*twitter-consumer-secret*
+           #:*oauth-callback-base*
            #:*etirwemos-src-dir*
            #:*etirwemos-js-lib-dir*
            #:*etirwemos-log-dir*
            #:*data-stor*))
 (in-package :etirwemos)
+
 
 
 ;;;
@@ -92,7 +92,6 @@
 (defun make-request (env path-param)
   (clack.request:make-request (append env `(:path-param ,path-param))
                               :request-class '<eti-request>))
-
 
 
 

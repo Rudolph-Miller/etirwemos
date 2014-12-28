@@ -93,7 +93,8 @@ function searchGoogle(start){
 
     status('start');
     $.ajax({
-        url: $.format('http://%s/etirwemos/search/www/google/start/%s',location.host,start)
+        //url: $.format('http://%s/etirwemos/search/www/google/start/%s',location.host,start)
+        url: 'http://'+location.host+'/etirwemos/search/www/google/start/'+start
     }).done(function(data){
         if(data==null)
             data=[];
@@ -131,7 +132,8 @@ function searchGithub(start){
 
     status('start');
     $.ajax({
-        url: $.format('http://%s/etirwemos/github/repogitory/search/page/%s',location.host,start)
+        //url: $.format('http://%s/etirwemos/github/repogitory/search/page/%s',location.host,start)
+        url: 'http://'+location.host+'/etirwemos/github/repogitory/search/page/'+start
     }).done(function(data){
         if(data==null)
             data=[];
@@ -172,7 +174,8 @@ function addGithubCards(data,nextStart){
                    con:[{tag:'div',
                          con:[{tag:'a',attr:{href:this.html_url,target:'_blank'},
                                con:[{tag:'p',cls:['title'],
-                                     con:$.format('%s @%s',this.name, this.language)}]},
+                                     //con:$.format('%s @%s',this.name, this.language)}]},
+                                     con:this.name + ' @' + this.language}]},
                               {tag:'p',cls:['description'],
                                con:this.description},
                               {tag:'table',cls:['timestamp'],

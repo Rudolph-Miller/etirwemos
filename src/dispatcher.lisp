@@ -1,7 +1,10 @@
 (in-package :etirwemos)
 
-(defvar *dispach-table* nil)
 
+;;;
+;;; URIパスと関数との関連付け。
+;;;
+(defvar *dispach-table* nil)
 
 (defun get-mime-string (key)
   (cond ((eq key :js)  "application/x-javascript")
@@ -42,19 +45,22 @@
 
 
 
-(defvar *etirwemos-src-dir*    nil)
-(defvar *etirwemos-js-lib-dir* nil)
+
+;;;
+;;; ファイルディスパッチャ
+;;;
+(defvar *etirwemos-src-dir* nil
+  "etirwemosのソースファイルが配置されているディレクトリを指定する。")
+(defvar *etirwemos-js-lib-dir* nil
+  "javascript のライブラリが配置されているルート・ディレクトリを指定する。")
 
 (defun js-lib-pathname (path)
+  "TODO: これ、src-pathname と統合できそうじゃね。"
   (pathname (concatenate 'string *etirwemos-js-lib-dir* path)))
 
 (defun src-pathname (path)
   (pathname (concatenate 'string *etirwemos-src-dir* path)))
 
-
-;;;
-;;; ファイルディスパッチャ
-;;;
 (defun file-data ()
   "ファイルのデータを返すんよ。"
   `(("/etirwemos.js"     (:js  ,(src-pathname    "etirwemos.js")))
@@ -68,7 +74,6 @@
 
 (defun get-file-data (path)
   (second (assoc path (file-data) :test 'equalp)))
-
 
 (defun file-dispatcher (req)
   (let ((file-data (get-file-data (clack.request:path-info req))))
