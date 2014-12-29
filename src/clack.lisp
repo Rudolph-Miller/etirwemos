@@ -69,6 +69,16 @@ TODO:時間に余裕があったら盛ります。"
 
 
 
+;; アクセス・ロガーの設定。 これでええんじゃろうか。
+;; (setf clack.middleware.accesslog:*access-logger*
+;;       (let ((logger (log:category '(clack middleware accesslog))))
+;;      (log:config logger :own :trace)
+;;      (log4cl:add-appender logger
+;;                           (make-instance 'log4cl:file-appender :file "/home/yanqirenshi/var/etirwemos/log/etirwemos.log"
+;;                                          :layout (make-instance 'log4cl:pattern-layout :conversion-pattern "%m%n")))
+;;      logger))
+
+
 ;;;
 ;;; Clack の開始と終了
 ;;;
@@ -80,7 +90,7 @@ TODO:時間に余裕があったら盛ります。"
     (setf *handler*
           (clackup
            (builder
-            <clack-middleware-accesslog>
+            ;; <clack-middleware-accesslog>
             (<clack-middleware-backtrace>
              :output (error-log-file)
              :result-on-error '(500 () ("Internal Server Error")))
