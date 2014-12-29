@@ -272,18 +272,19 @@ function addTweetCards(data,nextStart){
  * 蛇足
  */
 function drawClouds(count){
-
     var sky = $('section#sky');
     var w = sky.width(), h = sky.height();
+    var width = 231, height = 141;
     for(var i=0 ;i<count;i++)
         sky.append($.html.gen(
             {tag:'img',
              attr:{src:'/img/cloud.png',
                    style:'position:fixed;'
-                   + 'top:'  + Math.floor( Math.random() * h ) + 'px; '
-                   + 'left:' + Math.floor( Math.random() * w ) + 'px;',
-                   width:231 ,
-                   height:141}}));
+                   + 'left:' + (Math.floor( Math.random() * w ) - width/2) + 'px;'
+                   + 'top:'  + (Math.floor( Math.random() * h ) - height/2) + 'px;',
+                   width:width ,
+                   height:height}}));
+
 };
 var loadTime = null;
 function setLoadTime(){
