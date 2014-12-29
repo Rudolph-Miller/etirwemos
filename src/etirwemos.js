@@ -1,22 +1,44 @@
 $(function () {
     $.html = new yzrHtml();
 
-    $('title').text('WCLR: Google');
+    fitBackgroundFont();
+    $(window).resize(function() {
+        fitBackgroundFont();
+    });
 
+    start();
+});
+function fitBackgroundFont(){
+    var place = $('section#background > p');
+    var h = place.height();
+    var fontSize = 222;
+    if(h>=fontSize*3){
+        place.css('line-height',h/3+'px');
+    }else{
+        //三行入らん場合。
+        place.parent().css('padding','55px');
+        h = place.height();
+        place.css('line-height',h/3+'px');
+        place.css('font-size',h/3+'px');
+    }
+};
+function start(){
     var glide = $('#reports').glide(
         { autoplay: false,
           circular: false,
           beforeTransition: function() {},
           afterTransition: function() {
               if(this.currentSlide==0)
-                  $('title').text('WCLR: Google');
+                  $('title').text('CLWR: Google');
 
               if(this.currentSlide==-1)
-                  $('title').text('WCLR: Twitter');
+                  $('title').text('CLWR: Twitter');
 
               if(this.currentSlide==-2)
-                  $('title').text('WCLR: Github');
+                  $('title').text('CLWR: Github');
           }});
+
+    $('title').text('WCLR: Google');
 
     drawClouds(88);
 
@@ -25,8 +47,7 @@ $(function () {
     searchTweet();
 
     setInterval("jojo()",1000);
-});
-
+};
 function status(action){
     var background = $('section#background');
 

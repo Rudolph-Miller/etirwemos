@@ -88,7 +88,7 @@
 ;;;
 (defun etirwemos.html (env)
   (declare (ignore env))
-  (gen-html "WCLR"
+  (gen-html "CLWR"
       '("/lib/glide.css" "/etirwemos-anime.css" "/etirwemos.css")
       '("https://code.jquery.com/jquery-2.1.3.min.js"
         "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
@@ -98,7 +98,7 @@
         "/lib/glide.js"
         "/etirwemos.js")
     (:section :id "background" :style "z-index:-999;"
-              (:p "World Common Lisp Reports"))
+              (:p "Common Lisp World Reports"))
     (:section :id "sky" :style "z-index:-888;")
     (:section :id "reports" :style "z-index:999;"
               (:section :class "slider__wrapper"
@@ -127,7 +127,9 @@
          ("section,article,div" :box-sizing border-box :box-sizing border-box)
          ("body > section" :position fixed)
          ("section#background" :padding 88px)
-         ("section#background > p" :font-size 222px
+         ("section#background > p" :height 100%
+                                   :width 100%
+                                   :font-size 222px
                                    :color ,(css.color :font))
          ("section#background.start > p" :color ,(css.color :active))
          ("section#reports" :background ,(css.color :base 0.11))
