@@ -26,6 +26,7 @@
            #:*github-password*
            #:*oauth-callback-base*
            #:*etirwemos-src-dir*
+           #:*etirwemos-img-dir*
            #:*etirwemos-js-lib-dir*
            #:*etirwemos-log-dir*
            #:*data-stor*))

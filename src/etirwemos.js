@@ -3,25 +3,28 @@ $(function () {
 
     $('title').text('WCLR: Google');
 
-    var glide = $('#reports').glide({
-        autoplay: false,
-        circular: false,
-        beforeTransition: function() {},
-        afterTransition: function() {
-            if(this.currentSlide==0)
-                $('title').text('WCLR: Google');
+    var glide = $('#reports').glide(
+	{ autoplay: false,
+	  circular: false,
+	  beforeTransition: function() {},
+	  afterTransition: function() {
+	      if(this.currentSlide==0)
+		  $('title').text('WCLR: Google');
 
-            if(this.currentSlide==-1)
-                $('title').text('WCLR: Twitter');
+	      if(this.currentSlide==-1)
+		  $('title').text('WCLR: Twitter');
 
-            if(this.currentSlide==-2)
-                $('title').text('WCLR: Github');
-        }
-    });
+	      if(this.currentSlide==-2)
+		  $('title').text('WCLR: Github');
+	  }});
+
+    drawClouds(88);
 
     searchGoogle();
     searchGithub();
     searchTweet();
+
+    setInterval("jojo()",1000);
 });
 
 function status(action){
@@ -105,6 +108,7 @@ function searchGoogle(start){
     $.ajax({
         url: 'http://'+location.host+'/etirwemos/search/www/google/start/'+start
     }).done(function(data){
+	setLoadTime();
         if(data==null)
             data=[];
         addGoogleCards(data,start+10);
@@ -142,6 +146,7 @@ function searchGithub(start){
     $.ajax({
         url: 'http://'+location.host+'/etirwemos/github/repogitory/search/page/'+start
     }).done(function(data){
+	setLoadTime();
         if(data==null)
             data=[];
         addGithubCards(data,start+1);
@@ -204,6 +209,7 @@ function searchTweet(start){
     $.ajax({
         url: 'http://'+location.host+'/etirwemos/search/tweet/start/'+start
     }).done(function(data){
+	setLoadTime();
         if(data==null)
             data=[];
         addTweetCards(data,start+1);
@@ -251,4 +257,59 @@ function addTweetCards(data,nextStart){
     });
 
     addCards('tweet',pool,stmt,'start',nextStart);
+};
+
+
+
+/**
+ * 蛇足
+ */
+function drawClouds(count){
+
+    var sky = $('section#sky');    
+    var w = sky.width(), h = sky.height();
+    for(var i=0 ;i<count;i++)
+	sky.append($.html.gen(
+	    {tag:'img',
+	     attr:{src:'/img/cloud.png',
+		   style:'position:fixed;'
+		   + 'top:'  + Math.floor( Math.random() * h ) + 'px; '
+		   + 'left:' + Math.floor( Math.random() * w ) + 'px;',
+		   width:231 ,
+		   height:141}}));
+};
+var loadTime = moment();
+function setLoadTime(){
+    loadTime = moment().add('M',15);
+};
+var jojoMode = 'gogo';
+function jojo(){
+    if(loadTime > moment()){
+	jojoMode=null;
+	return;
+    }
+
+    if(jojoMode==null){
+	var mode = Math.floor(Math.random()*10%2);
+	jojoMode = [{name:'dodo', w:453, h:473},
+		    {name:'gogo', w:270, h:474}][mode];
+    }
+
+    var body = $('body');    
+    var w = body .width(), h = body.height();
+
+    var gain = (100 - Math.random()*77)/100;
+    body.append($.html.gen(
+	{tag:'img',
+	 cls:['born','gion'],
+	 attr:{src:'/img/'+jojoMode.name+'.png',
+	       style:'position:fixed;z-index:9999;'
+	       + 'top:'  + Math.floor( Math.random() * h ) + 'px; '
+	       + 'left:' + Math.floor( Math.random() * w ) + 'px;',
+	       width:jojoMode.w*gain ,
+	       height:jojoMode.h*gain}}));    
+
+    body.find('img.born.gion')
+	.mouseover(function () {$(this).remove();})
+	.removeClass('born');
 };

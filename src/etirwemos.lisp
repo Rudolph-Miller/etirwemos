@@ -100,6 +100,7 @@
         "/etirwemos.js")
     (:section :id "background" :style "z-index:-999;"
               (:p "World Common Lisp Reports"))
+    (:section :id "sky" :style "z-index:-888;")
     (:section :id "reports" :style "z-index:999;"
               (:section :class "slider__wrapper"
                         (:section :class "slider__item" :id "google"
@@ -126,7 +127,7 @@
          ("section#background > p" :font-size 222px
                                    :color ,(css.color :font))
          ("section#background.start > p" :color ,(css.color :active))
-         ("section#reports" :background ,(css.color :base 0.95))
+         ("section#reports" :background ,(css.color :base 0.11))
          ("section.slider__item > .pool" :padding 11px :overflow auto
                                          :height 100%)
          ;;;
@@ -134,7 +135,7 @@
          ;;;
          ("article.report" :padding 11px
                            :float left)
-         ("article.report > div" :background ,(css.color :contents 0.33)
+         ("article.report > div" :background ,(css.color :contents 0.95)
                                  :width 450px ;;:width 222px
                                  :height 225px
                                  :border-radius 3px
@@ -208,6 +209,9 @@
           (:regex    "/lib/format4js.js" :fields nil :function file-dispatcher)
           (:regex    "/yzr.js"           :fields nil :function file-dispatcher)
           (:regex    "/yzrHtml.js"       :fields nil :function file-dispatcher)
+          (:regex    "/img/cloud.png"    :fields nil :function file-dispatcher)
+          (:regex    "/img/dodo.png"     :fields nil :function file-dispatcher)
+          (:regex    "/img/gogo.png"     :fields nil :function file-dispatcher)
           ;;;
           ;;; REST-API
           ;;;
