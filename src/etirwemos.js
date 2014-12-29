@@ -4,19 +4,19 @@ $(function () {
     $('title').text('WCLR: Google');
 
     var glide = $('#reports').glide(
-	{ autoplay: false,
-	  circular: false,
-	  beforeTransition: function() {},
-	  afterTransition: function() {
-	      if(this.currentSlide==0)
-		  $('title').text('WCLR: Google');
+        { autoplay: false,
+          circular: false,
+          beforeTransition: function() {},
+          afterTransition: function() {
+              if(this.currentSlide==0)
+                  $('title').text('WCLR: Google');
 
-	      if(this.currentSlide==-1)
-		  $('title').text('WCLR: Twitter');
+              if(this.currentSlide==-1)
+                  $('title').text('WCLR: Twitter');
 
-	      if(this.currentSlide==-2)
-		  $('title').text('WCLR: Github');
-	  }});
+              if(this.currentSlide==-2)
+                  $('title').text('WCLR: Github');
+          }});
 
     drawClouds(88);
 
@@ -57,7 +57,14 @@ function getSearchFunc(type){
 function addCards(type,pool,stmt,name,val){
     pool.append($.html.gen(stmt));
 
-    pool.find('article.born').fadeIn("slow").removeClass('born');
+    var cards = pool.find('article.born');
+    pool.find('article.report.born > div').click(function(e){
+        if(e.ctrlKey)
+            $(this).parent().fadeOut();
+        else
+            $(this).toggleClass('weak');
+    });
+    cards.fadeIn("slow").removeClass('born');
 
     var attr = {type:type};
     attr[name]=val;
@@ -108,7 +115,7 @@ function searchGoogle(start){
     $.ajax({
         url: 'http://'+location.host+'/etirwemos/search/www/google/start/'+start
     }).done(function(data){
-	setLoadTime();
+        setLoadTime();
         if(data==null)
             data=[];
         addGoogleCards(data,start+10);
@@ -120,7 +127,7 @@ function searchGoogle(start){
 
 };
 function addGoogleCards(data,nextStart){
-    var pool = $('section#google > .pool');
+    var pool = $('section#google .pool');
     var stmt = [];
     $.each(data,function(){
         stmt.push(genReportCard(
@@ -146,7 +153,7 @@ function searchGithub(start){
     $.ajax({
         url: 'http://'+location.host+'/etirwemos/github/repogitory/search/page/'+start
     }).done(function(data){
-	setLoadTime();
+        setLoadTime();
         if(data==null)
             data=[];
         addGithubCards(data,start+1);
@@ -158,7 +165,7 @@ function searchGithub(start){
 
 };
 function addGithubCards(data,nextStart){
-    var pool = $('section#github > section.pool');
+    var pool = $('section#github section.pool');
     var fmtDt = function(data,key,imagep){
         var val = data[key];
         var tds = [];
@@ -209,7 +216,7 @@ function searchTweet(start){
     $.ajax({
         url: 'http://'+location.host+'/etirwemos/search/tweet/start/'+start
     }).done(function(data){
-	setLoadTime();
+        setLoadTime();
         if(data==null)
             data=[];
         addTweetCards(data,start+1);
@@ -221,7 +228,7 @@ function searchTweet(start){
 
 };
 function addTweetCards(data,nextStart){
-    var pool = $('section#twitter > section.pool');
+    var pool = $('section#twitter section.pool');
 
     var fmtDt = function(data,key,imagep){
         var val = data[key];
@@ -266,17 +273,17 @@ function addTweetCards(data,nextStart){
  */
 function drawClouds(count){
 
-    var sky = $('section#sky');    
+    var sky = $('section#sky');
     var w = sky.width(), h = sky.height();
     for(var i=0 ;i<count;i++)
-	sky.append($.html.gen(
-	    {tag:'img',
-	     attr:{src:'/img/cloud.png',
-		   style:'position:fixed;'
-		   + 'top:'  + Math.floor( Math.random() * h ) + 'px; '
-		   + 'left:' + Math.floor( Math.random() * w ) + 'px;',
-		   width:231 ,
-		   height:141}}));
+        sky.append($.html.gen(
+            {tag:'img',
+             attr:{src:'/img/cloud.png',
+                   style:'position:fixed;'
+                   + 'top:'  + Math.floor( Math.random() * h ) + 'px; '
+                   + 'left:' + Math.floor( Math.random() * w ) + 'px;',
+                   width:231 ,
+                   height:141}}));
 };
 var loadTime = moment();
 function setLoadTime(){
@@ -285,31 +292,31 @@ function setLoadTime(){
 var jojoMode = 'gogo';
 function jojo(){
     if(loadTime > moment()){
-	jojoMode=null;
-	return;
+        jojoMode=null;
+        return;
     }
 
     if(jojoMode==null){
-	var mode = Math.floor(Math.random()*10%2);
-	jojoMode = [{name:'dodo', w:453, h:473},
-		    {name:'gogo', w:270, h:474}][mode];
+        var mode = Math.floor(Math.random()*10%2);
+        jojoMode = [{name:'dodo', w:453, h:473},
+                    {name:'gogo', w:270, h:474}][mode];
     }
 
-    var body = $('body');    
+    var body = $('body');
     var w = body .width(), h = body.height();
 
     var gain = (100 - Math.random()*77)/100;
     body.append($.html.gen(
-	{tag:'img',
-	 cls:['born','gion'],
-	 attr:{src:'/img/'+jojoMode.name+'.png',
-	       style:'position:fixed;z-index:9999;'
-	       + 'top:'  + Math.floor( Math.random() * h ) + 'px; '
-	       + 'left:' + Math.floor( Math.random() * w ) + 'px;',
-	       width:jojoMode.w*gain ,
-	       height:jojoMode.h*gain}}));    
+        {tag:'img',
+         cls:['born','gion'],
+         attr:{src:'/img/'+jojoMode.name+'.png',
+               style:'position:fixed;z-index:9999;'
+               + 'top:'  + Math.floor( Math.random() * h ) + 'px; '
+               + 'left:' + Math.floor( Math.random() * w ) + 'px;',
+               width:jojoMode.w*gain ,
+               height:jojoMode.h*gain}}));
 
     body.find('img.born.gion')
-	.mouseover(function () {$(this).remove();})
-	.removeClass('born');
+        .mouseover(function () {$(this).remove();})
+        .removeClass('born');
 };

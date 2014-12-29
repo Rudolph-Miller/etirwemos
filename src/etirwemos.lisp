@@ -104,11 +104,14 @@
     (:section :id "reports" :style "z-index:999;"
               (:section :class "slider__wrapper"
                         (:section :class "slider__item" :id "google"
-                                  (:section :class "pool"))
+                                  (:section :class "container"
+                                            (:section :class "pool")))
                         (:section :class "slider__item" :id "twitter"
-                                  (:section :class "pool"))
+                                  (:section :class "container"
+                                            (:section :class "pool")))
                         (:section :class "slider__item" :id "github"
-                                  (:section :class "pool"))))))
+                                  (:section :class "container"
+                                            (:section :class "pool")))))))
 
 
 
@@ -128,19 +131,26 @@
                                    :color ,(css.color :font))
          ("section#background.start > p" :color ,(css.color :active))
          ("section#reports" :background ,(css.color :base 0.11))
-         ("section.slider__item > .pool" :padding 11px :overflow auto
-                                         :height 100%)
+         ("section.slider__item > .container" :padding "33px 11px" :overflow auto
+                                              :height 100%)
+         ("section.slider__item .pool" :width 1416px
+                                       :overflow hiden
+                                       :margin-left auto
+                                       :margin-right auto)
          ;;;
          ;;; card report
          ;;;
          ("article.report" :padding 11px
                            :float left)
-         ("article.report > div" :background ,(css.color :contents 0.95)
-                                 :width 450px ;;:width 222px
+         ("article.report > div" :width 450px ;;:width 222px
                                  :height 225px
                                  :border-radius 3px
                                  :padding 22px)
+         ("article.report > div"       :background ,(css.color :contents 0.95))
          ("article.report > div:hover" :background ,(css.color :contents 1))
+         ("article.report > div.weak"       :background none)
+         ("article.report > div.weak:hover" :background ,(css.color :contents 0.2))
+         ("article.report > div.weak img" :opacity 0.2)
          ;;; report timestamp
          ("article.report table.timestamp" :margin "8px 0px 8px 0px")
          ("article.report table.timestamp td" :font-size 80%)
@@ -181,11 +191,13 @@
          ("article.report.tweet p.text" :height 122px
                                         :overflow hidden)
          ;; glider
+         (".slider__arrows-item"        :font-weight bold
+                                        :border-radius 3px)
          (".slider__arrows-item"        :background ,(css.color :hilight-greenl 0.11) :padding 20px)
          (".slider__arrows-item:hover"  :background ,(css.color :hilight-greenl 1))
          (".slider__arrows-item:active" :background ,(css.color :hilight-greenl 0.33))
-         (".slider__arrows-item--right" :right 1px)
-         (".slider__arrows-item--left"  :left 1px)
+         (".slider__arrows-item--right" :right 3px)
+         (".slider__arrows-item--left"  :left 3px)
          )))))
 
 
