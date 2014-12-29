@@ -285,13 +285,13 @@ function drawClouds(count){
                    width:231 ,
                    height:141}}));
 };
-var loadTime = moment();
+var loadTime = null;
 function setLoadTime(){
     loadTime = moment().add('M',15);
 };
 var jojoMode = 'gogo';
 function jojo(){
-    if(loadTime > moment()){
+    if(loadTime==null || loadTime > moment()){
         jojoMode=null;
         return;
     }

@@ -37,8 +37,7 @@
     (,(cl-css:css
        `((* :margin 0px :padding 0px)
          (html :background ,(css.color :base))
-         ("html, body"
-          :width 100% :height 100%)
+         ("html, body" :width 100% :height 100%)
          ("ul" :margin-left 22px)
          ("div#table-of-contents" :clear both :padding 22px)
          ("div#content" :margin-top 88px)
@@ -61,7 +60,7 @@
          ("div.outline-3 > h3" :margin-bottom 11px)
          ("div.outline-3" :margin "22px 0px 22px 11px")
          ("div.outline-text-3" :margin-left 22px)
-         ("div.outline-4" :margin "11px 0px 22px 22px")
+         s         ("div.outline-4" :margin "11px 0px 22px 22px")
          ("div.outline-text-3" :margin-left 33px)
          ("div.outline-text-4" :margin-left 33px))))))
 
@@ -90,7 +89,7 @@
 (defun etirwemos.html (env)
   (declare (ignore env))
   (gen-html "WCLR"
-      '("/lib/glide.css" "/etirwemos.css")
+      '("/lib/glide.css" "/etirwemos-anime.css" "/etirwemos.css")
       '("https://code.jquery.com/jquery-2.1.3.min.js"
         "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
         "/yzr.js"
@@ -122,7 +121,8 @@
     (,(cl-css:css
        `((* :margin 0px :padding 0px
             :color ,(css.color :font))
-         (html :background ,(css.color :base))
+         (html :background ,(css.color :base)
+               :-webkit-animation "myani 60s linear infinite")
          ("html, body, body > section" :width 100% :height 100%)
          ("section,article,div" :box-sizing border-box :box-sizing border-box)
          ("body > section" :position fixed)
@@ -212,6 +212,7 @@
           (:regex    "/etirwemos.html"   :fields nil :function etirwemos.html)
           (:regex    "/etirwemos.css"    :fields nil :function etirwemos.css)
           (:regex    "/etirwemos.js"     :fields nil :function file-dispatcher)
+          (:regex    "/etirwemos-anime.css" :fields nil :function file-dispatcher)
           (:regex    "/me.html"          :fields nil :function me.html)
           (:regex    "/me.html/"         :fields nil :function me.html)
           (:regex    "/me.css"           :fields nil :function me.css)

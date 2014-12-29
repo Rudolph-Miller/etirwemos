@@ -76,6 +76,7 @@
     ("/lib/format4js.js" (:js  ,(js-lib-pathname "format4js/format4js.js")))
     ("/yzr.js"           (:js  ,(src-pathname    "yzr.js")))
     ("/yzrHtml.js"       (:js  ,(src-pathname    "yzrHtml.js")))
+    ("/etirwemos-anime.css" (:css  ,(src-pathname    "etirwemos-anime.css")))
     ("/img/cloud.png"    (:png  ,(img-pathname    "cloud.png")))
     ("/img/dodo.png"     (:png  ,(img-pathname    "dodo.png")))
     ("/img/gogo.png"     (:png  ,(img-pathname    "gogo.png")))))
