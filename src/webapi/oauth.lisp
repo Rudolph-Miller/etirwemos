@@ -3,14 +3,14 @@
 #|
 
 OAuth 用のライブラリなんよ。
-
-ほとんど cl-oauth のラッパーじゃえけぇね。
+主にデータ保管のコードです。
+データ保管先は shinrabanshou を利用しています。
 
 |#
 
 
 ;;;;;
-;;;;;
+;;;;; People Class
 ;;;;;
 (defclass people (shinra:node)
   ((code :documentation ""
@@ -18,17 +18,22 @@ OAuth 用のライブラリなんよ。
          :initarg :code)
    (name :documentation ""
          :accessor name
-         :initarg :name)))
+         :initarg :name))
+  (:documentation "OAuth に限らずユーザーを扱うクラスです。
+どこのユーザーかは関係で表現しようと思います。"))
 
 
 (defgeneric get-people (code &key pool object-class)
+  (:documentation "pool から code の値で people を取得します。
+将来的にpeople の居場所の指定が必須になります。")
   (:method ((code string) &key (pool *pool*) (object-class 'people))
     (first (up:find-object-with-slot pool object-class 'code code))))
 
 
 (defgeneric tx-make-people (pool code name)
+  (:documentation "森羅上に people を保管します。
+ただ、people 単体で作成することはないので、一時的な内容です。")
   (:method ((pool shinra:banshou) code name)
-    "森羅上に people を保管します。"
     (shinra:tx-make-node pool 'people
                          'code code
                          'name name)))
@@ -54,7 +59,9 @@ OAuth 用のライブラリなんよ。
    (user-data-id       :documentation ""
                        :accessor user-data-id       :initarg :user-data-id)
    (user-data-name     :documentation ""
-                       :accessor user-data-name     :initarg :user-data-name)))
+                       :accessor user-data-name     :initarg :user-data-name))
+  (:documentation "OAuth のプロバイダの情報を保持するクラスです。
+今後は cl-oauth の class:token を継承予定です。"))
 
 (defgeneric get-oauth-provider (code &key pool object-class)
   (:documentation "oauth-provider を shinra から取得するよ。")
@@ -68,13 +75,12 @@ OAuth 用のライブラリなんよ。
                                          request-token-url authorize-url access-token-url
                                          user-data-id user-data-name
                                          &key object-class)
-  (:documentation "")
+  (:documentation "森羅上に oauth-provider を保管します。")
   (:method ((pool shinra:banshou)
             code consumer-key consumer-secret
             request-token-url authorize-url access-token-url
             user-data-id user-data-name
             &key (object-class 'oauth-provider))
-    "森羅上に oauth-provider を保管します。"
     (shinra:tx-make-node pool object-class
                          'code               code
                          'consumer-key       consumer-key
@@ -86,6 +92,7 @@ OAuth 用のライブラリなんよ。
                          'user-data-name     user-data-name)))
 
 
+
 ;;;;;
 ;;;;; OAuth アスセストークン
 ;;;;;
@@ -93,7 +100,9 @@ OAuth 用のライブラリなんよ。
   ((key    :documentation ""
            :accessor key    :initarg :key)
    (secret :documentation ""
-           :accessor secret :initarg :secret)))
+           :accessor secret :initarg :secret))
+  (:documentation "OAuth のアクセス・トークンの情報を保持するクラスです。
+今後は cl-oauth の class:token を継承予定です。"))
 
 
 (defgeneric get-oauth-access-token (pool people provider)
@@ -115,13 +124,26 @@ OAuth 用のライブラリなんよ。
       (shinra:tx-make-edge *pool* 'shinra:edge people token :have)
       token)))
 
+(defgeneric tx-update-oauth-access-token (pool people provider key secret) (:documentation ""))
+(defgeneric tx-save-oauth-access-token (pool people provider key secret) (:documentation ""))
+
+
+(defgeneric gen-oauth-access-token (provider access-token)
+  (:documentation "")
+  (:method ((provider oauth-provider) (access-token oauth-access-token))
+    (oauth:make-access-token :consumer (oauth:make-consumer-token
+                                        :key    (consumer-key  provider)
+                                        :secret (consumer-secret provider))
+                             :key    (key access-token)
+                             :secret (secret access-token))))
+
 
 
 ;;;;;
 ;;;;;
 ;;;;;
 (defgeneric find-next-node (pool start node r-type next-node)
-  (:documentation "")
+  (:documentation "TODO:コードが重複しとるが今度にしよう。")
   (:method  ((pool shinra:banshou)
              (start symbol)
              (node shinra:node)
@@ -158,7 +180,8 @@ OAuth 用のライブラリなんよ。
 
 ;; (get-access-token-at *pool* :twitter "114195568")
 (defgeneric get-access-token-at (pool provider people)
-  (:documentation "")
+  (:documentation "pool から アクセストークンを取得します。
+取得は provide と people で取得します。")
   (:method ((pool shinra:banshou) (provider oauth-provider) (people people))
     (apply 'append
            (mapcar #'(lambda (token)

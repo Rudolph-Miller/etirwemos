@@ -49,3 +49,12 @@
       (,(json:encode-json-to-string
          (mapcar #'github-rep-item2map
                  (cdr (assoc :items (search-github :page start)))))))))
+
+
+(defun api-search-tweet (env)
+  "https://dev.twitter.com/rest/reference/get/search/tweets"
+  (declare (ignore env))
+  `(200
+    (:content-type "application/json")
+    (,(json:encode-json-to-string
+       (mapcar #'tweet-2-map (search-tweet))))))

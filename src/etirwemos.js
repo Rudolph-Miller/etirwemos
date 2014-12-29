@@ -21,6 +21,7 @@ $(function () {
 
     searchGoogle();
     searchGithub();
+    searchTweet();
 });
 
 function status(action){
@@ -187,4 +188,28 @@ function addGithubCards(data,nextStart){
     });
 
     addCards('github',pool,stmt,'start',nextStart);
+};
+
+
+/**
+ * Twitter
+ */
+function searchTweet(start){
+    if(start==null)
+        start = 1;
+
+    status('start');
+    $.ajax({
+        url: 'http://'+location.host+'/etirwemos/search/tweet/start/'+start
+    }).done(function(data){
+        dump(data);
+        // if(data==null)
+        //     data=[];
+        // addGithubCards(data,start+1);
+    }).fail(function(data){
+        console.log('fail');
+    }).always(function(data){
+        status('end');
+    });
+
 };
