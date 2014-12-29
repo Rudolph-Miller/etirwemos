@@ -167,7 +167,7 @@ function addGithubCards(data,nextStart){
                                       width:55,height:55,
                                       alt:data.owner.login,
                                       title:data.owner.login}}}});
-        tds.push({tag:'td',con:key.replace('_at', ' : ')});
+        tds.push({tag:'td',cls:['title'],con:key.replace('_at', ' : ')});
         tds.push({tag:'td',con:moment(val).format('YYYY-MM-DD HH:mm:ss (dddd)')});
 
         return {tag:'tr',con:tds};
@@ -231,7 +231,7 @@ function addTweetCards(data,nextStart){
                                       alt:data.name,
                                       title:data.description}}}});
         }
-        tds.push({tag:'td',con:key.replace('_at','')+' : '});
+        tds.push({tag:'td',cls:['title'],con:key.replace('_at','')+' : '});
         tds.push({tag:'td',con:val});
         return {tag:'tr',con:tds};
     };

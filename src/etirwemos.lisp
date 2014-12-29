@@ -128,10 +128,7 @@
          ("section#background.start > p" :color ,(css.color :active))
          ("section#reports" :background ,(css.color :base 0.95))
          ("section.slider__item > .pool" :padding 11px :overflow auto
-                                         :height 100%
-                                         :width 1440px
-                                         :margin-left auto
-                                         :margin-right auto)
+                                         :height 100%)
          ;;;
          ;;; card report
          ;;;
@@ -143,10 +140,10 @@
                                  :border-radius 3px
                                  :padding 22px)
          ("article.report > div:hover" :background ,(css.color :contents 1))
-         ("article.report > div p.title" :margin-bottom 22px)
          ;;; report timestamp
          ("article.report table.timestamp" :margin "8px 0px 8px 0px")
          ("article.report table.timestamp td" :font-size 80%)
+         ("article.report table.timestamp tr > td.title" :text-align right)
          ("article.report table.timestamp img.icon" :margin-right 11px)
          ;;; operator card
          ("article.operator" :padding 11px
@@ -166,12 +163,22 @@
          ("article.clear-load > div:hover"  :background ,(css.color :hilight-blue 1)
                                             :color      ,(css.color :contents))
          ("article.clear-load > div:active" :background ,(css.color :hilight-blue 0.33))
+         ;;; google report card
+         ("article.report.google p.title" :height 40px
+                                          :margin-bottom 11px)
+         ("article.report.google p.snippet" :height 125px
+                                            :font-size 15px)
          ;;; github report card
          ("article.report.github p.title" :font-weight bold
                                           :text-overflow ellipsis
                                           :white-space nowrap
-                                          :overflow hidden)
-         ("article.report.github p.description" :height 66px :overflow-y auto)
+                                          :overflow hidden
+                                          :margin-bottom 11px)
+         ("article.report.github p.description" :height 66px :overflow-y auto
+                                                :height 91px)
+         ;;; twitter report card
+         ("article.report.tweet p.text" :height 122px
+                                        :overflow hidden)
          ;; glider
          (".slider__arrows-item"        :background ,(css.color :hilight-greenl 0.11) :padding 20px)
          (".slider__arrows-item:hover"  :background ,(css.color :hilight-greenl 1))

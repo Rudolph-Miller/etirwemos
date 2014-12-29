@@ -28,7 +28,7 @@ baihu で利用しとったコードなんじゃけど、これを流用しよ�
   (maphash #'(lambda (k v)
                (setf (gethash k map)
                      (if (and v (listp v) (atom (first v)))
-                         (tweet-map-value-2-map (alist-hash-table v))
+                         (tweet-map-2-map (alist-hash-table v))
                          v)))
            map)
   map)
