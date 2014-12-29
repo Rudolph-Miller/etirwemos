@@ -54,15 +54,6 @@
          (list ,@body)))
 
 
-
-(defmacro webapi-response-json (&body body)
-  "これだけのためにマクロを使う必要があるのかな。。。まぁ数が増えれば。。"
-  `(list 200
-         (list :content-type "application/json")
-         (list (json:encode-json-to-string
-                ,@body))))
-
-
 ;;;
 ;;; main page
 ;;;

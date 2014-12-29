@@ -29,7 +29,9 @@
            #:*etirwemos-img-dir*
            #:*etirwemos-js-lib-dir*
            #:*etirwemos-log-dir*
-           #:*data-stor*))
+           #:*data-stor*
+           #:start
+           #:stop))
 (in-package :etirwemos)
 
 

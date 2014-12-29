@@ -1,6 +1,16 @@
 (in-package :etirwemos)
 
 
+;;;
+;;; macro
+;;;
+(defmacro webapi-response-json (&body body)
+  "これだけのためにマクロを使う必要があるのかな。。。まぁ数が増えれば。。"
+  `(list 200
+         (list :content-type "application/json")
+         (list (json:encode-json-to-string
+                ,@body))))
+
 
 (defgeneric get-path-param (env name &optional type)
   (:documentation "TODO:内容は不十分じゃねぇ。
