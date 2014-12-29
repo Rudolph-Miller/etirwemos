@@ -1,46 +1,31 @@
 (in-package :etirwemos)
 
+
 (defun me.html (env)
   (declare (ignore env))
-  (let* ((css-list '("/me.css"))
-         (js-list  '("https://code.jquery.com/jquery-2.1.3.min.js"
-                     "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
-                     "/lib/format4js.js"
-                     "/yzr.js"
-                     "/yzrHtml.js"
-                     "/me.js")))
-    `(200
-      (:content-type "text/html")
-      (,(let ((out (make-string-output-stream)))
-             (with-html-output (stream out :prologue t)
-               (:html (:head (:title "Yanqirenshi")
-                             ;; CSS
-                             (dolist (css css-list)
-                               (htm (:link :rel "stylesheet" :type "text/css" :href css))))
-                      (:body
-                       (:section :id "background" :style "z-index:-999;")
-                       (:section :id "setting"    :style "z-index:0;"
-                                 (:h1 "Yanqirenshi")
-                                 (:div :style "clear:both;")
-                                 (:article :class "card basic"
-                                           (:h2 "Basic")
-                                           (:p "岩崎仁是")
-                                           (:p "yanqirenshi@gmail.com")
-                                           (:p "Poor Lisper"))
-                                 (:article :class "card twitter"
-                                           (:h2 "twitter")
-                                           (:p "Auth time : 9999/99/99 99:99:99")
-                                           (:p "Name : yanqirenshi")
-                                           (:div (:a :href "/auth/twitter" "Sing In")
-                                                 (:a "Sing Out")))
-                                 (:article :class "card github"      (:h2 "github"))
-                                 (:article :class "card facebook"    (:h2 "Facebook"))
-                                 (:article :class "card google-plus" (:h2 "Google+"))
-                                 (:article :class "card hatena"      (:h2 "Hatena")))
-                       ;; js lib
-                       (dolist (js js-list)
-                         (htm (:script :src js)))))
-               (get-output-stream-string out)))))))
+  (gen-html "Yanqirenshi"
+      '("/me.css")
+      '("https://code.jquery.com/jquery-2.1.3.min.js"
+        "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
+        "/lib/format4js.js"
+        "/yzr.js"
+        "/yzrHtml.js"
+        "/me.js")
+    (:section :id "background" :style "z-index:-999;")
+    (:section :id "setting"    :style "z-index:0;"
+              (:h1 "Yanqirenshi")
+              (:div :style "clear:both;")
+              (:article :class "card basic"
+                        (:h2 "Basic")
+                        (:p "岩崎仁是")
+                        (:p "yanqirenshi@gmail.com")
+                        (:p "Poor Lisper"))
+              (:article :class "card twitter"
+                        (:h2 "twitter")
+                        (:p "Auth time : 9999/99/99 99:99:99")
+                        (:p "Name : yanqirenshi")
+                        (:div (:a :href "/auth/twitter" "Sing In")
+                              (:a "Sing Out"))))))
 
 
 

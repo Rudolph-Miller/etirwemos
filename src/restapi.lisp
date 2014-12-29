@@ -33,28 +33,22 @@
 (defun search-www-json (env)
   "google customer search の結果を返すけぇ。"
   (let ((start (get-path-param env :start :integer)))
-    `(200
-      (:content-type "application/json")
-      (,(encode-json-to-string
-         (mapcar #'alist-hash-table
-                 (cdr (assoc :items (search-google "common lisp" :start start)))))))))
+    (webapi-response-json
+      (mapcar #'alist-hash-table
+              (cdr (assoc :items (search-google "common lisp" :start start)))))))
 
 
 
 (defun search-github-rep (env)
   ""
   (let ((start (get-path-param env :page :integer)))
-    `(200
-      (:content-type "application/json")
-      (,(json:encode-json-to-string
-         (mapcar #'github-rep-item2map
-                 (cdr (assoc :items (search-github :page start)))))))))
+    (webapi-response-json
+      (mapcar #'github-rep-item2map
+              (cdr (assoc :items (search-github :page start)))))))
 
 
 (defun api-search-tweet (env)
-  "https://dev.twitter.com/rest/reference/get/search/tweets"
+  ""
   (declare (ignore env))
-  `(200
-    (:content-type "application/json")
-    (,(json:encode-json-to-string
-       (mapcar #'tweet-2-map (search-tweet))))))
+  (webapi-response-json
+    (mapcar #'tweet-2-map (search-tweet))))
