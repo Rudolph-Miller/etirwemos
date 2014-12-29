@@ -32,9 +32,12 @@ TODO:時間に余裕があったら盛ります。"
                    :accessor universal-time)))
 
 
-(defun app (env)
-  "clack に渡すアプリの関数じゃけぇ。
-TODO: clack:component  を利用してみよう。"
+;;;
+;;; clack:<component> を利用してみます。
+;;; 現在のレベルでは必要とはしとらんけど clack を使うのんが目的の一つなんで。
+;;;
+(defclass <etirwemos> (clack:<component>) ())
+(defmethod clack:call ((this <etirwemos>) env)
   (multiple-value-bind (ret path-param func)
       (parse-path (getf env :path-info))
     (let ((request (make-request env path-param)))
@@ -42,6 +45,7 @@ TODO: clack:component  を利用してみよう。"
           (handler-case (funcall func request)
             (etirwemos-error (e) (error-case-reply env e)))
           (page-not-found-reply env)))))
+
 
 
 ;;;
@@ -89,7 +93,7 @@ TODO: clack:component  を利用してみよう。"
              :path              "/auth/twitter"
              :callback-base     *oauth-callback-base*
              :authorized #'twitter-oauth-authorized)
-            #'app)
+            (make-instance '<etirwemos>))
            ;; :server :woo
            :debug t))))
 
