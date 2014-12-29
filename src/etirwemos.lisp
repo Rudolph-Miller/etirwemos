@@ -119,8 +119,7 @@
        `((* :margin 0px :padding 0px
             :color ,(css.color :font))
          (html :background ,(css.color :base))
-         ("html, body, body > section"
-          :width 100% :height 100%)
+         ("html, body, body > section" :width 100% :height 100%)
          ("section,article,div" :box-sizing border-box :box-sizing border-box)
          ("body > section" :position fixed)
          ("section#background" :padding 88px)
@@ -128,49 +127,57 @@
                                    :color ,(css.color :font))
          ("section#background.start > p" :color ,(css.color :active))
          ("section#reports" :background ,(css.color :base 0.95))
-         ("section.slider__item > .pool" :padding 55px :overflow auto
-                                         :height 100%)
+         ("section.slider__item > .pool" :padding 11px :overflow auto
+                                         :height 100%
+                                         :width 1440px
+                                         :margin-left auto
+                                         :margin-right auto)
          ;;;
          ;;; card report
          ;;;
          ("article.report" :padding 11px
                            :float left)
          ("article.report > div" :background ,(css.color :contents 0.33)
-                                 :width 466px ;;:width 222px
-                                 :height 222px
+                                 :width 450px ;;:width 222px
+                                 :height 225px
                                  :border-radius 3px
                                  :padding 22px)
          ("article.report > div:hover" :background ,(css.color :contents 1))
          ("article.report > div p.title" :margin-bottom 22px)
+         ;;; report timestamp
+         ("article.report table.timestamp" :margin "8px 0px 8px 0px")
+         ("article.report table.timestamp td" :font-size 80%)
+         ("article.report table.timestamp img.icon" :margin-right 11px)
+         ;;; operator card
          ("article.operator" :padding 11px
                              :float left)
-         ("article.operator > div" :width 222px
-                                   :height 222px
+         ("article.operator > div" :width 214px
+                                   :height 225px
                                    :border-radius 3px
                                    :padding 22px
                                    :font-size 55px
                                    :text-align center
                                    :padding-top 33px)
          ("article.next-load > div"        :background ,(css.color :active 0.11))
-         ("article.next-load > div:hover"  :background ,(css.color :active 0.22))
-         ("article.next-load > div:active" :background ,(css.color :active)
+         ("article.next-load > div:hover"  :background ,(css.color :active 1)
                                            :color      ,(css.color :contents))
+         ("article.next-load > div:active" :background ,(css.color :active 0.33))
          ("article.clear-load > div"        :background ,(css.color :hilight-blue 0.11))
-         ("article.clear-load > div:hover"  :background ,(css.color :hilight-blue 0.22))
-         ("article.clear-load > div:active" :background ,(css.color :hilight-blue)
+         ("article.clear-load > div:hover"  :background ,(css.color :hilight-blue 1)
                                             :color      ,(css.color :contents))
-         ;;;
-         ;;; card report github
-         ;;;
-         ("article.report.github table.timestamp" :margin "8px 0px 8px 0px")
-         ("article.report.github table.timestamp td" :font-size 80%)
-         ("article.report.github table.timestamp img.icon" :margin-right 11px)
+         ("article.clear-load > div:active" :background ,(css.color :hilight-blue 0.33))
+         ;;; github report card
          ("article.report.github p.title" :font-weight bold
                                           :text-overflow ellipsis
                                           :white-space nowrap
                                           :overflow hidden)
          ("article.report.github p.description" :height 66px :overflow-y auto)
-
+         ;; glider
+         (".slider__arrows-item"        :background ,(css.color :hilight-greenl 0.11) :padding 20px)
+         (".slider__arrows-item:hover"  :background ,(css.color :hilight-greenl 1))
+         (".slider__arrows-item:active" :background ,(css.color :hilight-greenl 0.33))
+         (".slider__arrows-item--right" :right 1px)
+         (".slider__arrows-item--left"  :left 1px)
          )))))
 
 

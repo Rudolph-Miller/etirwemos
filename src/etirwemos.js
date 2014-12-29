@@ -46,6 +46,9 @@ function getSearchFunc(type){
     if(type=='github')
         return searchGithub;
 
+    if(type=='tweet')
+        return searchTweet;
+
     throw new Error('対応しとらんよ。type='+type);
 };
 function addCards(type,pool,stmt,name,val){
@@ -84,6 +87,12 @@ function addCards(type,pool,stmt,name,val){
     });
 };
 
+function genReportCard(type,con){
+    return {tag:'article',
+            cls:['report',type,'born'],
+            attr:{style:'display:none;'},
+            con:con};
+}
 
 /**
  * Google
@@ -94,7 +103,6 @@ function searchGoogle(start){
 
     status('start');
     $.ajax({
-        //url: $.format('http://%s/etirwemos/search/www/google/start/%s',location.host,start)
         url: 'http://'+location.host+'/etirwemos/search/www/google/start/'+start
     }).done(function(data){
         if(data==null)
@@ -111,18 +119,17 @@ function addGoogleCards(data,nextStart){
     var pool = $('section#google > .pool');
     var stmt = [];
     $.each(data,function(){
-        stmt.push({tag:'article',
-                   cls:['report','born'],
-                   attr:{style:'display:none;'},
-                   con:[{tag:'div',
-                         con:[{tag:'a',attr:{href:this.link},
-                               con:[{tag:'p',cls:['title'],con:this.htmlTitle}]},
-                              {tag:'p',cls:['snippet'],con:this.htmlSnippet}]}]});
+        stmt.push(genReportCard(
+            'google',
+            [{tag:'div',
+              con:[{tag:'a',attr:{href:this.link},
+                    con:[{tag:'p',cls:['title'],con:this.htmlTitle}]},
+                   {tag:'p',cls:['snippet'],con:this.htmlSnippet}]}]));
     });
 
     addCards('google',pool,stmt,'start',nextStart);
-
 };
+
 
 /**
  * Github
@@ -133,7 +140,6 @@ function searchGithub(start){
 
     status('start');
     $.ajax({
-        //url: $.format('http://%s/etirwemos/github/repogitory/search/page/%s',location.host,start)
         url: 'http://'+location.host+'/etirwemos/github/repogitory/search/page/'+start
     }).done(function(data){
         if(data==null)
@@ -169,22 +175,18 @@ function addGithubCards(data,nextStart){
 
     var stmt = [];
     $.each(data,function(){
-        stmt.push({tag:'article',
-                   cls:['report','github','born'],
-                   attr:{style:'display:none;'},
-                   con:[{tag:'div',
-                         con:[{tag:'a',attr:{href:this.html_url,target:'_blank'},
-                               con:[{tag:'p',cls:['title'],
-                                     //con:$.format('%s @%s',this.name, this.language)}]},
-                                     con:this.name + ' @' + this.language}]},
-                              {tag:'p',cls:['description'],
-                               con:this.description},
-                              {tag:'table',cls:['timestamp'],
-                               con:{tag:'tobdy',con:[fmtDt(this,'updated_at',true),
-                                                     fmtDt(this,'pushed_at'),
-                                                     fmtDt(this,'created_at')]}}
-
-                             ]}]});
+        stmt.push(genReportCard(
+            'github',
+            [{tag:'div',
+              con:[{tag:'a',attr:{href:this.html_url,target:'_blank'},
+                    con:[{tag:'p',cls:['title'],
+                          con:this.name + ' @' + this.language}]},
+                   {tag:'p',cls:['description'],
+                    con:this.description},
+                   {tag:'table',cls:['timestamp'],
+                    con:{tag:'tobdy',con:[fmtDt(this,'updated_at',true),
+                                          fmtDt(this,'pushed_at'),
+                                          fmtDt(this,'created_at')]}}]}]));
     });
 
     addCards('github',pool,stmt,'start',nextStart);
@@ -202,14 +204,51 @@ function searchTweet(start){
     $.ajax({
         url: 'http://'+location.host+'/etirwemos/search/tweet/start/'+start
     }).done(function(data){
-        dump(data);
-        // if(data==null)
-        //     data=[];
-        // addGithubCards(data,start+1);
+        if(data==null)
+            data=[];
+        addTweetCards(data,start+1);
     }).fail(function(data){
         console.log('fail');
     }).always(function(data){
         status('end');
     });
 
+};
+function addTweetCards(data,nextStart){
+    var pool = $('section#twitter > section.pool');
+
+    var fmtDt = function(data,key,imagep){
+        var val = data[key];
+        var tds = [];
+
+        if(imagep){
+            tds.push({tag:'td',attr:{rowspan:3},
+                      con:{tag:'a',
+                           attr:{href:data.profile_image_url,target:'_blank'},
+                           con:{tag:'img',cls:['icon'],
+                                attr:{src:data.profile_image_url,
+                                      width:55,height:55,
+                                      alt:data.name,
+                                      title:data.description}}}});
+        }
+        tds.push({tag:'td',con:key.replace('_at','')+' : '});
+        tds.push({tag:'td',con:val});
+        return {tag:'tr',con:tds};
+    };
+
+    var stmt = [];
+    $.each(data,function(){
+        stmt.push(genReportCard(
+            'tweet',
+            [{tag:'div',
+              con:[{tag:'a',attr:{href:null,target:'_blank'},
+                    con:[{tag:'p',cls:['text'],con:this.text}]},
+                   {tag:'table',cls:['timestamp'],
+                    con:{tag:'tobdy',con:[fmtDt(this.user,'name',true),
+                                          fmtDt(this.user,'location'),
+                                          fmtDt(this,'created_at')]}}
+                  ]}]));
+    });
+
+    addCards('tweet',pool,stmt,'start',nextStart);
 };
