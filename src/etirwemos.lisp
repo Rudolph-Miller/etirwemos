@@ -197,6 +197,7 @@
           (:regex    "/img/cloud.png"    :fields nil :function file-dispatcher)
           (:regex    "/img/dodo.png"     :fields nil :function file-dispatcher)
           (:regex    "/img/gogo.png"     :fields nil :function file-dispatcher)
+          f          (:regex    "/balus!!"          :fields nil :function balus!!)
           ;;;
           ;;; REST-API
           ;;;

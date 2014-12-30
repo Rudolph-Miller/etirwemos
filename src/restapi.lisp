@@ -12,6 +12,7 @@
                 ,@body))))
 
 
+
 (defgeneric get-path-param (env name &optional type)
   (:documentation "TODO:内容は不十分じゃねぇ。
 上と下はいっしょじゃし非効率じゃねぇ。まぁ後回し作戦で。")
@@ -37,6 +38,20 @@
               ((eq type :integer)
                (parse-integer val))
               (t (error "対応していないタイプです。type=~a,val=~a" type val)))))))
+
+
+
+(defun balus!! (env)
+  "最小の完全数 6秒まって自壊(停止)する。"
+  (declare (ignore env))
+  (sb-thread:make-thread #'(lambda ()
+                             (sleep 6)
+                             (eti:stop))
+                         :name "balus!!")
+  (webapi-response-json
+    (alist-hash-table
+     `((:balus-time        . (get-universal-time))
+       (:explode-plan-time . (+ (geft-universal-time) 6))))))
 
 
 
