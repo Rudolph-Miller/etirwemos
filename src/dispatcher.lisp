@@ -56,6 +56,9 @@
   "etirwemosで利用する画像が配置されているディレクトリを指定する。")
 (defvar *etirwemos-js-lib-dir* nil
   "javascript のライブラリが配置されているルート・ディレクトリを指定する。")
+(defvar *file-table* nil
+  "uri のパスとファイルの関連付けを管理します。
+書き方は main.lisp 参照。")
 
 (defun js-lib-pathname (path)
   "TODO: これ、src-pathname と統合できそうじゃね。"
@@ -67,22 +70,8 @@
 (defun img-pathname (path)
   (pathname (concatenate 'string *etirwemos-img-dir* path)))
 
-(defun file-data ()
-  "ファイルのデータを返すんよ。"
-  `(("/etirwemos.js"     (:js  ,(src-pathname    "etirwemos.js")))
-    ("/me.js"            (:js  ,(src-pathname    "me.js")))
-    ("/lib/glide.js"     (:js  ,(js-lib-pathname "Glide.js/dist/jquery.glide.min.js")))
-    ("/lib/glide.css"    (:css ,(js-lib-pathname "Glide.js/dist/css/style.css")))
-    ("/lib/format4js.js" (:js  ,(js-lib-pathname "format4js/format4js.js")))
-    ("/yzr.js"           (:js  ,(src-pathname    "yzr.js")))
-    ("/yzrHtml.js"       (:js  ,(src-pathname    "yzrHtml.js")))
-    ("/etirwemos-anime.css" (:css  ,(src-pathname    "etirwemos-anime.css")))
-    ("/img/cloud.png"    (:png  ,(img-pathname    "cloud.png")))
-    ("/img/dodo.png"     (:png  ,(img-pathname    "dodo.png")))
-    ("/img/gogo.png"     (:png  ,(img-pathname    "gogo.png")))))
-
 (defun get-file-data (path)
-  (second (assoc path (file-data) :test 'equalp)))
+  (second (assoc path *file-table* :test 'equalp)))
 
 (defun file-dispatcher (req)
   (let ((file-data (get-file-data (clack.request:path-info req))))

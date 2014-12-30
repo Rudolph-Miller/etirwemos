@@ -28,6 +28,27 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
                :cl-oauth)
   :components ((:module "src"
                         :components
+                        ;;
+                        ;; package
+                        ;;    |
+                        ;;    +-------------------------+
+                        ;;    |                         |
+                        ;; dispatcher                shinrabanshou
+                        ;;    |                         |
+                        ;;    +--------+                +------------------+------------+--------------+
+                        ;;    |        |                |                  |            |              |
+                        ;; etirwemos   me            webapi/oauth          |            |              |
+                        ;;    |        |                |                  |            |              |
+                        ;;    +--------+             webapi/twitter  webapi/bing  webapi/google  webapi/github
+                        ;;    |                         :                  |            |              |
+                        ;;  clack                       +------------------+------------+--------------+
+                        ;;    |                         :
+                        ;;    |                      restapi
+                        ;;    |                         |
+                        ;;    +-------------------------+
+                        ;;    |
+                        ;;  main
+                        ;;
                         ((:file "package")
                          (:file "shinrabanshou"  :depends-on ("package"))
                          (:file "webapi/oauth"   :depends-on ("shinrabanshou"))
@@ -35,12 +56,13 @@ Author: Satoshi Iwasaki (yanqirenshi@gmail.com)
                          (:file "webapi/google"  :depends-on ("shinrabanshou"))
                          (:file "webapi/github"  :depends-on ("shinrabanshou"))
                          (:file "webapi/twitter" :depends-on ("webapi/oauth"))
-                         (:file "restapi"        :depends-on ("webapi/bing" "webapi/google" "webapi/github"))
+                         (:file "restapi"        :depends-on ("webapi/twitter" "webapi/bing" "webapi/google" "webapi/github"))
                          (:file "dispatcher"     :depends-on ("package"))
                          (:file "etirwemos"      :depends-on ("dispatcher"))
                          (:file "me"             :depends-on ("dispatcher"))
                          (:file "clack"          :depends-on ("etirwemos" "me"))
-                         (:file "main"           :depends-on ("clack" "shinrabanshou")))))
+                         (:file "main"           :depends-on ("clack" "restapi")))))
+
   :description ""
   :long-description
   #.(with-open-file (stream (merge-pathnames

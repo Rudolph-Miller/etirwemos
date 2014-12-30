@@ -84,7 +84,6 @@ TODO:時間に余裕があったら盛ります。"
 ;;;
 (defun start-clack ()
   (when *handler* (error "前のんがまだ動いとるよ。"))
-  (refresh-dispach-table)
   (let ((twitter-provider (get-oauth-provider :twitter)))
     (unless twitter-provider (error "not exist oauth provider. name=~a":twitter))
     (setf *handler*
