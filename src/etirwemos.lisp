@@ -50,7 +50,7 @@
 (defmacro gen-css (&body body)
   "これだけのためにマクロを使う必要があるのかな。。。まぁ数が増えれば。。"
   `(list 200
-         '(:content-type "text/html")
+         '(:content-type "text/css")
          (list ,@body)))
 
 
