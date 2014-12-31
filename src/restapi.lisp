@@ -64,6 +64,6 @@
 
 (defun api-search-tweet (env)
   ""
-  (declare (ignore env))
-  (webapi-response-json
-    (mapcar #'tweet-2-map (search-tweet))))
+  (let ((start (get-path-param-value env :max-id :str)))
+    (webapi-response-json
+      (mapcar #'tweet-2-map (search-tweet start)))))

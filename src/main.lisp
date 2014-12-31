@@ -46,7 +46,7 @@
            :fields   (:page)
            :function search-github-rep)
           (:regex    "/etirwemos/search/tweet/start/(\\d+)"
-           :fields   (:start)
+           :fields   (:max-id)
            :function api-search-tweet))))
 
 (defun start ()

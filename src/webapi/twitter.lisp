@@ -12,9 +12,8 @@ baihu で利用しとったコードなんじゃけど、これを流用しよ�
 
 ;;;
 ;;; Search Tweet
-;;; (mapcar #'tweet-2-map (search-tweet))
 ;;;
-(defun search-tweet ()
+(defun search-tweet (max-id)
   (cdr (assoc :STATUSES
               (json:decode-json-from-string
                (sb-ext:octets-to-string
@@ -22,7 +21,9 @@ baihu で利用しとったコードなんじゃけど、これを流用しよ�
                  "https://api.twitter.com/1.1/search/tweets.json"
                  (gen-oauth-access-token (get-oauth-provider :twitter)
                                          (get-access-token-at *pool* :twitter "114195568"))
-                 :user-parameters '(("q" . "common lisp"))))))))
+                 :user-parameters (append '(("q" . "common lisp")) 
+					  (if (string= "0" max-id) nil `(("max_id" . ,max-id))))
+		 ))))))
 
 (defun tweet-map-2-map (map)
   (maphash #'(lambda (k v)

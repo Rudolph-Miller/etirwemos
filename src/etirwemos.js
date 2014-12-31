@@ -99,16 +99,16 @@ function getCallWepApiData(type){
     if(type=='tweet')
         return {uri:'http://'+location.host+'/etirwemos/search/tweet/start/',
                 counter:function(page,data){
-                    var tmp = data;
-                    if(tmp==null)
-                        return page;
-                    return page + 1;
+                    return data[data.length-1].id;
                 },
                 drower:addTweetCards};
 };
 function callWepApi(type,start){
     if(start==null)
-        start = 1;
+	if(type=='tweet')
+           start = 0;
+	else
+           start = 1;
 
     var api = getCallWepApiData(type);
     status('start');
@@ -124,6 +124,7 @@ function callWepApi(type,start){
     }).always(function(data){
         status('end');
     });
+
 };
 
 
@@ -223,6 +224,7 @@ function addGithubCards(data,nextStart){
     addCards('github',pool,stmt,'start',nextStart);
 };
 function addTweetCards(data,nextStart){
+
     var pool = $('section#twitter section.pool');
 
     var fmtDt = function(data,key,imagep){
@@ -239,6 +241,9 @@ function addTweetCards(data,nextStart){
                                       alt:data.name,
                                       title:data.description}}}});
         }
+	if(key=='created_at')
+	    val = moment(val).format('YYYY/MM/DD HH:mm:ss');
+
         tds.push({tag:'td',cls:['title'],con:key.replace('_at','')+' : '});
         tds.push({tag:'td',con:val});
         return {tag:'tr',con:tds};
