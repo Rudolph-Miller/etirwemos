@@ -56,20 +56,21 @@
          :raw-body (shared-raw-body env)
          env))
 
-
 (defun split-cookie (cookie)
+  "cookie の文字列をlispに変換しています。"
   (let ((pos (search "=" cookie)))
     `((,(subseq cookie 0 pos) . ,(subseq cookie (+ 1 pos))))))
 
 (defmethod initialize-instance :after ((this <request>) &rest env)
+  "cookie をパース出来ないケースがあったので split-cookie でバイパスしています。"
   (remf env :allow-other-keys)
   (setf (slot-value this 'env) env)
 
   ;; cookies
   (when-let (cookie (gethash "cookie" (headers this)))
-    (setf (slot-value this 'http-cookie)
-          (loop for kv in (ppcre:split "\\s*[,;]\\s*" cookie)
-             append (split-cookie kv))))
+            (setf (slot-value this 'http-cookie)
+                  (loop for kv in (ppcre:split "\\s*[,;]\\s*" cookie)
+                     append (split-cookie kv))))
 
   ;; GET parameters
   (when (and (not (slot-boundp this 'query-parameters))
@@ -93,6 +94,7 @@
 
 
 (defun make-request (env path-param)
+  "clack.request:make-request をラッピングして path-param に対応しています。"
   (clack.request:make-request (append env `(:path-param ,path-param))
                               :request-class '<eti-request>))
 

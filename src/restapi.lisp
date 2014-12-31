@@ -32,38 +32,41 @@
 
 
 (defun balus!! (env)
-  "最小の完全数 6秒まって自壊(停止)する。"
+  "最小の完全数 6秒まって自壊(停止)する。もちろん意味はない。"
   (declare (ignore env))
   (sb-thread:make-thread #'(lambda ()
                              (sleep 6)
                              (eti:stop))
                          :name "balus!!")
   (webapi-response-json
-    (alist-hash-table
-     `((:balus-time        . (get-universal-time))
-       (:explode-plan-time . (+ (geft-universal-time) 6))))))
+   (alist-hash-table
+    `((:balus-time        . (get-universal-time))
+      (:explode-plan-time . (+ (geft-universal-time) 6))))))
 
 
 
 (defun search-www-json (env)
-  "google customer search の結果を返すけぇ。"
+  "google customer search の結果を取得します。
+検索結果は日付で降順にソートされています。"
   (let ((start (get-path-param-value env :start :integer)))
     (webapi-response-json
-      (mapcar #'alist-hash-table
-              (cdr (assoc :items (search-google "common lisp" :start start)))))))
+     (mapcar #'alist-hash-table
+             (cdr (assoc :items (search-google "common lisp" :start start)))))))
 
 
 
 (defun search-github-rep (env)
-  ""
+  "github のリポジトリで lisp を利用しているものを取得します。
+更新日付の降順にソートされています。"
   (let ((start (get-path-param-value env :page :integer)))
     (webapi-response-json
-      (mapcar #'github-rep-item2map
-              (cdr (assoc :items (search-github :page start)))))))
+     (mapcar #'github-rep-item2map
+             (cdr (assoc :items (search-github :page start)))))))
 
 
 (defun api-search-tweet (env)
-  ""
+  "common lisp についての tweet を取得します。
+tweet日時の降順にソートされています。"
   (declare (ignore env))
   (webapi-response-json
-    (mapcar #'tweet-2-map (search-tweet))))
+   (mapcar #'tweet-2-map (search-tweet))))

@@ -1,9 +1,5 @@
 (in-package :etirwemos)
 
-#|
-ファイルの名前が気にいらんが。。。。。あとで修正するとして。
-|#
-
 (defun init-dispatch-data ()
   (setf *file-table*
         `(("/etirwemos.js"        (:js   ,(src-pathname    "etirwemos.js")))
@@ -49,10 +45,12 @@
            :fields   (:start)
            :function api-search-tweet))))
 
+
 (defun start ()
   (init-dispatch-data)
   (start-up)
   (start-clack))
+
 
 (defun stop ()
   (stop-clack)
