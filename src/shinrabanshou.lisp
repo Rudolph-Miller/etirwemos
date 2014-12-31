@@ -8,26 +8,23 @@ upanishad を利用するためのコードじゃけぇ。
 
 
 (defvar *data-stor* nil
-  "upanishad がデータ(オブジェクト)をシリアライズしてファイルに保管するためのディレクトリ")
+  "upanishad がデータ(オブジェクト)をシリアライズしてファイルに保管するためのディレクトリです。")
 
 
 (defvar *pool* nil
-  "shinrabanshou の banshou クラスを保管する定数になるけぇ。
-banshou ってのは upanishad の poolクラスのサブクラスじゃけぇね。")
+  "shinrabanshou の banshou クラスを保管する定数です。")
 
 
 (defun start-up ()
-  "upanishad の pool のインスタンスを作成して、upanishad を開始するけぇ。
-この表現でええかいね？"
+  "upanishad の pool のインスタンスを作成して、upanishad を開始します。"
   (when *pool*
     (error "すでに起動しとるけぇ。pool=~a" *pool*))
   (setf *pool* (shinra:make-banshou 'shinra:banshou *data-stor*)))
 
 
 (defun stop-up ()
-  "upanishad の pool を停止させるけぇ。
-*pool* はクローズ時に自動コミットするようにしとるけぇ。
-選べるようにした方がええんじゃろうか。"
+  "upanishad の pool を停止させます。
+*pool* はクローズ時に自動コミットしています。"
   (when *pool*
     (up:snapshot *pool*)
     (up:close-open-streams *pool*)

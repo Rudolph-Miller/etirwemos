@@ -4,9 +4,11 @@
 ;;;
 ;;; URIパスと関数との関連付け。
 ;;;
-(defvar *dispach-table* nil)
+(defvar *dispach-table* nil
+  "")
 
 (defun get-mime-string (key)
+  "キーワード・パラメータのmimeタイプをを文字列のmimeタイプに変換します。"
   (cond ((eq key :js)  "application/x-javascript")
         ((eq key :css) "text/css")
         ((eq key :png) "image/png")
@@ -14,7 +16,7 @@
 
 
 (defun make-path-param (fields values)
-  ""
+  "fields(list) と values(array) をマージしてパス・パラメータを生成します。"
   (when (and (and fields values)
              (= (length fields) (length values)))
     (let ((len (length fields))
@@ -31,8 +33,7 @@
 
 
 (defun parse-path (uri &key (table *dispach-table*))
-  "uri の パスをパースして、パスパラメータとuriに割り当てられた関数を変えすけぇ。
-複数値で返すんじゃけど、最初のんはパスに割り当てられた関数があったかどうかじゃけぇ。"
+  "uri の パスをパースして、パス・パラメータとuriに割り当てられた関数を返します。"
   (when table
     (let ((item (car table)))
       (multiple-value-bind (ret arr)
@@ -46,22 +47,23 @@
 
 
 
-
 ;;;
 ;;; ファイルディスパッチャ
 ;;;
 (defvar *etirwemos-src-dir* nil
   "etirwemosのソースファイルが配置されているディレクトリを指定する。")
+
 (defvar *etirwemos-img-dir* nil
   "etirwemosで利用する画像が配置されているディレクトリを指定する。")
+
 (defvar *etirwemos-js-lib-dir* nil
   "javascript のライブラリが配置されているルート・ディレクトリを指定する。")
+
 (defvar *file-table* nil
   "uri のパスとファイルの関連付けを管理します。
 書き方は main.lisp 参照。")
 
 (defun js-lib-pathname (path)
-  "TODO: これ、src-pathname と統合できそうじゃね。"
   (pathname (concatenate 'string *etirwemos-js-lib-dir* path)))
 
 (defun src-pathname (path)
