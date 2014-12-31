@@ -3,3 +3,13 @@
     50% {background-color: rgba( 243, 238, 238,1);}
     100% {background-color: rgba( 238, 238, 238,1);}
 }
+
+@media screen and (min-width: 980px) {
+    section.slider__item .pool {width: 947px;}
+}
+
+@media screen and (min-width: 1440px) {
+    section.slider__item .pool {width: 1416px;}
+}
+
+

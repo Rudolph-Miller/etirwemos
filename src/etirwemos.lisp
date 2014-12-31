@@ -60,7 +60,7 @@
 (defun etirwemos.html (env)
   (declare (ignore env))
   (gen-html "CLWR"
-      '("/lib/glide.css" "/etirwemos-anime.css" "/etirwemos.css")
+      '("/lib/glide.css" "/etirwemos.css" "/etirwemos-anime.css")
       '("https://code.jquery.com/jquery-2.1.3.min.js"
         "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
         "/yzr.js"
@@ -111,7 +111,7 @@
        ("section.slider__item > .container" :padding "33px 11px" :overflow auto
                                             :height 100%)
        ("section.slider__item .pool" :width 1416px
-                                     :overflow hiden
+                                     :overflow hidden
                                      :margin-left auto
                                      :margin-right auto)
        ("section#start-page > div" :position fixed

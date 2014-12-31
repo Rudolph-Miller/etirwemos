@@ -17,6 +17,7 @@ function fitBackgroundFont(){
     var fontSize = 222;
     if(h>=fontSize*3){
         place.css('line-height',h/3+'px');
+        place.css('font-size',h/3+'px');
     }else{
         //三行入らん場合。
         place.parent().css('padding','55px');
@@ -46,7 +47,6 @@ function start(){
         drawClouds(88);
 
         $('title').text('WCLR: Google');
-
         callWepApi('google');
         callWepApi('github');
         callWepApi('tweet');
