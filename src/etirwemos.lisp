@@ -65,12 +65,17 @@
         "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
         "/yzr.js"
         "/yzrHtml.js"
-        ;;"/lib/format4js.js"
         "/lib/glide.js"
         "/etirwemos.js")
-    (:section :id "background" :style "z-index:-999;"
+    (:section :id "background":style "z-index:-999;"
               (:p "Common Lisp World Reports"))
     (:section :id "sky" :style "z-index:-888;")
+    (:section :id "start-page"
+              :style "z-index:99999;background:#eee"
+              (:div
+               (:p :class "start-title" "Common Lisp")
+               (:p :class "start-title" "World Reports")
+               (:button :id "start-button" "START")))
     (:section :id "reports" :style "z-index:999;"
               (:section :class "slider__wrapper"
                         (:section :class "slider__item" :id "google"
@@ -109,6 +114,23 @@
                                      :overflow hiden
                                      :margin-left auto
                                      :margin-right auto)
+       ("section#start-page > div" :position fixed
+                                   :top 50%
+                                   :width 100%
+                                   :height 300px
+                                   :margin-top "-150px")
+       ("p.start-title" :font-size 77px
+                        :text-align center
+                        :line-height 88px)
+       ("button#start-button" :background none
+                              :border none
+                              :outline none
+                              :font-size 33px
+                              :line-height 88px
+                              :margin auto
+                              :display block)
+       ("button#start-button:hover" :color ,(css.color :active))
+       ("button#start-button:active" :color ,(css.color :active 0.33))
          ;;;
          ;;; card report
          ;;;
